@@ -290,13 +290,43 @@ SVN 凭据用 `--username` / `--password` 或 `--no-auth-cache`，别写进脚�
 
 ## 10. 以后要迁移怎么办
 
-### 换 SVN 服务器
+### 从本机试验库搬到正式服务器
+
+⚠️ **`svn relocate` 只改工作副本的 URL 指向，不会搬运历史。** 换服务器要分两步：
+
+**第一步：搬历史（三选一）**
 
 ```powershell
-svn relocate https://old.server/svn/urp-art https://new.server/svn/urp-art
+# 方式 A：dump / load（最通用，离线可行）
+svnrdump dump file:///F:/svn/urp-art > F:\urp-art.dump
+svnrdump load https://your.server/svn/urp-art < F:\urp-art.dump
+# 若是老版本 svn，用：svnadmin dump F:\svn\urp-art > urp-art.dump
+
+# 方式 B：svnsync（服务器之间镜像，逐版同步，可断点续传）
+svnsync initialize https://your.server/svn/urp-art file:///F:/svn/urp-art --source-username x --source-password y
+svnsync synchronize https://your.server/svn/urp-art
+
+# 方式 C：只搬当前版本（不要历史，最快）
+#   服务器上建空库 → 各工作副本 commit 一次即可，历史全丢
 ```
 
-工作副本里的本地改动全部保留（每个美术目录各执行一次）。
+**第二步：让工作副本指向新地址**
+
+```powershell
+svn relocate https://your.server/svn/urp-art Assets/Textures
+# 每个美术目录各执行一次（共 10 个）
+```
+
+`relocate` 只改 URL，本地未提交的改动全部保留。
+
+### 只想先做冷备份（不建服务器）
+
+```powershell
+# 仓库是自包含目录，直接整目录复制即可，无需停机
+robocopy F:\svn\urp-art D:\backup\svn-urp-art /MIR /R:1 /W:1
+```
+
+注意：**备份必须放在另一块物理盘或网络位置**。现在工作副本和仓库都在 F 盘，同一块盘上两份不等于备份。
 
 ### 合并回单一系统
 
@@ -348,11 +378,16 @@ svn relocate https://old.server/svn/urp-art https://new.server/svn/urp-art
 ### 待办
 
 ```powershell
-# 1. 联网后推送代码
+# 1. 联网后推送代码（美术资产不在这里，仓库只有 4 MB）
 git push -u origin main
 
-# 2. 在 Unity 里逐个打开 4 个场景，确认无粉色材质、无 missing reference
+# 2. ⚠️ 美术资产目前只在本机 F 盘（工作副本 + 仓库同盘），先做冷备份到另一块盘
+robocopy F:\svn\urp-art D:\backup\svn-urp-art /MIR /R:1 /W:1
 
-# 3. 有正式 SVN 服务器后，逐个工作副本迁移（本地改动全部保留）
-svn relocate file:///F:/svn/urp-art https://your.server/svn/urp-art Assets/Textures
+# 3. 在 Unity 里逐个打开 4 个场景，确认无粉色材质、无 missing reference
+
+# 4. 有正式 SVN 服务器后：先 dump/load 搬历史，再 relocate 改指向（见 §10）
+svnrdump dump file:///F:/svn/urp-art > F:\urp-art.dump
+svnrdump load https://your.server/svn/urp-art < F:\urp-art.dump
+svn relocate https://your.server/svn/urp-art Assets/Textures
 ```
