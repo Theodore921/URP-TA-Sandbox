@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Grass_Mat
+  m_Shader: {fileID: 4800000, guid: 06787077585e85c4eb10c8b021b2b292, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _TrailTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WindNoise:
+        m_Texture: {fileID: 2800000, guid: 7ceb887cb41766f48b384b8a51d93786, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AOPower: 2.2
+    - _AmbientBoost: 1
+    - _BendAmount: 0.25
+    - _BladeTintStrength: 0.28
+    - _ColorBrightness: 1
+    - _ColorRemap: 1
+    - _FadeEnd: 40
+    - _FadeStart: 28
+    - _FarBlendStrength: 0.45
+    - _FlutterFadeEnd: 30
+    - _FlutterFadeStart: 10
+    - _FlutterLength: 30
+    - _FlutterSpeed: 1.8
+    - _Height: 0.85
+    - _MidPoint: 0.62
+    - _MinPixelWidth: 1.6
+    - _NoFadeColorSoft: 0.22
+    - _NormalFadeEnd: 26
+    - _NormalFadeStart: 8
+    - _NormalYMidribSoft: 0.1
+    - _NormalYRimPosition: 0.5
+    - _NormalYRimSoft: 0.08
+    - _NormalYStrength: 0.7
+    - _P1XMidpoint: 0
+    - _P1YCurve: 0.5
+    - _RoughnessMax: 0.3
+    - _RoughnessMin: 0.2
+    - _SpecularDistanceEnd: 45
+    - _SpecularDistanceStart: 15
+    - _SpecularMax: 0.1
+    - _SpecularMin: 0.05
+    - _ThicknessTilt: 0.65
+    - _TipFadeAmount: 0.75
+    - _TrailDebug: 0
+    - _TrailFlatten: 0.45
+    - _TrailMidWeight: 0.5
+    - _TrailStrength: 2.2
+    - _Translucency: 0.35
+    - _TranslucencyBoost: 0.9
+    - _Width: 0.035
+    - _WindDebug: 0
+    - _WindFlutter: 3
+    - _WindRandom: 1
+    - _WindScaleMidpoint: 0.5
+    - _WindScaleTop: 1
+    - _WindSwell: 30
+    - _WindTexScale: 20
+    - _WindTotalScale: 1.39
+    m_Colors:
+    - _BottomColor: {r: 0.015, g: 0.035, b: 0.01, a: 1}
+    - _FadeAlbedo: {r: 1, g: 0.92, b: 0.34999996, a: 0}
+    - _MidColor: {r: 0.07499998, g: 0.18499997, b: 0.032, a: 1}
+    - _RoughSpecularTill: {r: 1, g: 2, b: 0, a: 1}
+    - _TopColor: {r: 0.32999998, g: 0.39999998, b: 0.09499996, a: 1}
+    - _TrailRange: {r: 0, g: 0, b: 120, a: 0}
+    - _WindSpeed: {r: 1, g: 0.2, b: 0.5, a: 0}
+  m_BuildTextureStacks: []

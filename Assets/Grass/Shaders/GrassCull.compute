@@ -1,0 +1,102 @@
+// ============================================================================
+//  GrassCull.compute —— 视锥剔除 + 距离降密度 + 草地交互采样
+//
+//  ── 为什么把交互采样放在这里 ────────────────────────────────────────────
+//  最初是在草地顶点着色器里采样推力场（RT），实测在这套 Unity 2021.3 + URP 12
+//  + D3D11 组合下，顶点阶段采样那张 RT 永远读回 0（同样的数据做成普通
+//  Texture2D 就正常）。所以改成在这里采样：
+//     compute 采样纹理是可靠的，而且每株草只采一次（顶点阶段要采 15 次）
+//
+//  采样结果写进压缩后的实例数据（c 通道 = push 向量），顶点阶段直接读，
+//  完全不做纹理采样。
+// ============================================================================
+
+#pragma kernel ResetArgs
+#pragma kernel Cull
+
+// 原始实例（32 字节/株）
+struct GrassInstance
+{
+    float4 a;   // 世界坐标 xyz, 朝向弧度
+    float4 b;   // 缩放, 随机0, 随机1, 色调
+};
+
+// 输出实例（48 字节/株）：多了 c = 推力向量（世界 XZ）
+struct GrassInstanceOut
+{
+    float4 a;
+    float4 b;
+    float4 c;
+};
+
+StructuredBuffer<GrassInstance>    _Instances;
+RWStructuredBuffer<GrassInstanceOut> _VisibleInstances;
+RWStructuredBuffer<uint>           _Args;
+
+// 推力场（世界空间二维向量，RG）
+Texture2D<float4>   _TrailTex;
+SamplerState        sampler_TrailTex;
+float4              _GrassTrailRange;   // xy = 中心, z = 尺寸
+
+float4 _FrustumPlanes[6];
+float3 _CameraPos;
+float  _MaxDistance;
+float  _DensityStart;
+float  _DensityEnd;
+float  _FarKeep;
+uint   _InstanceCount;
+uint   _CullEnabled;    // 0 = 不做视锥/距离剔除（调试用）
+
+// 每帧先把实例计数清零
+[numthreads(1, 1, 1)]
+void ResetArgs(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x == 0)
+        _Args[1] = 0;
+}
+
+[numthreads(256, 1, 1)]
+void Cull(uint3 id : SV_DispatchThreadID)
+{
+    uint i = id.x;
+    if (i >= _InstanceCount) return;
+
+    GrassInstance inst = _Instances[i];
+    float3 p = inst.a.xyz;
+
+    if (_CullEnabled != 0)
+    {
+        // ── 视锥剔除（留 1.5m 余量给草叶高度）────────────────────────
+        [unroll]
+        for (int k = 0; k < 6; k++)
+        {
+            if (dot(_FrustumPlanes[k].xyz, p) + _FrustumPlanes[k].w < -1.5) return;
+        }
+
+        // ── 距离剔除 ─────────────────────────────────────────────────
+        float d = distance(p, _CameraPos);
+        if (d > _MaxDistance) return;
+
+        // ── 距离降密度 ───────────────────────────────────────────────
+        float keep = lerp(1.0, _FarKeep,
+                          saturate((d - _DensityStart) / max(_DensityEnd - _DensityStart, 0.001)));
+        float h = frac(sin((float)i * 12.9898 + 78.233) * 43758.5453);
+        if (h > keep) return;
+    }
+
+    // ── 草地交互：采样推力场（每株一次）──────────────────────────────
+    float2 push = 0.0;
+    float2 uv = (p.xz - _GrassTrailRange.xy) / max(_GrassTrailRange.z, 0.001) + 0.5;
+    if (all(uv > 0.0) && all(uv < 1.0))
+        push = _TrailTex.SampleLevel(sampler_TrailTex, uv, 0).rg;
+
+    // ── 写压缩结果 ───────────────────────────────────────────────────
+    uint slot;
+    InterlockedAdd(_Args[1], 1, slot);
+
+    GrassInstanceOut o;
+    o.a = inst.a;
+    o.b = inst.b;
+    o.c = float4(push, 0.0, 0.0);
+    _VisibleInstances[slot] = o;
+}

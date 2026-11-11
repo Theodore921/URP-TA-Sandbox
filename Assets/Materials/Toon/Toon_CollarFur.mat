@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Toon_CollarFur
+  m_Shader: {fileID: 4800000, guid: 01c87a61fffab8f4a8f9f922935835a7, type: 3}
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2450
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 434ca63c68444ce439874a5c5a9b5a03, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FaceSDF:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HairSpecMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MatCap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PackedMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowRamp:
+        m_Texture: {fileID: 2800000, guid: 141e6f05bcfe61e46bd6498754251e58, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AOChannel: 0
+    - _AOStrength: 1
+    - _AlphaTest: 1
+    - _AmbientFloor: 0.7
+    - _CastShadowStrength: 0.85
+    - _Cull: 2
+    - _Cutoff: 0.3
+    - _DetailStrength: 0
+    - _EmissionIntensity: 1
+    - _EyeOn: 0
+    - _EyeShadowStrength: 0.5
+    - _EyeSpecIntensity: 0.9
+    - _EyeSpecPower: 90
+    - _FaceAnalytic: 0
+    - _FaceSDFDebug: 0
+    - _FaceSDFUV: 0
+    - _HairSpecIntensity: 1.2
+    - _HairSpecMapStrength: 1
+    - _HairSpecOn: 0
+    - _HairSpecPow: 36
+    - _HairSpecShift: 0.25
+    - _HairSpecWidth: 0.09
+    - _IndirectIntensity: 0.32
+    - _IrisEdgePower: 2
+    - _IrisEdgeStrength: 0.6
+    - _LightArea: 0.6
+    - _MatCapFlipY: 0
+    - _MatCapIntensity: 0
+    - _MetallicChannel: 0
+    - _MetallicSpecBoost: 1.6
+    - _NormalFlipY: 1
+    - _NormalScale: 1
+    - _OutlineAlbedoTint: 0.35
+    - _OutlineBackBoost: 1.5
+    - _OutlineMinDistance: 2
+    - _OutlineWidth: 0.4
+    - _RimIntensity: 0.45
+    - _RimLightFacing: 0.6
+    - _RimPower: 3.5
+    - _SDFFlip: 1
+    - _SDFFlipV: 0
+    - _SDFOffset: 0
+    - _SDFSideFlip: 1
+    - _SDFSmooth: 0.03
+    - _ShadowMapStrength: 0.7
+    - _ShadowSmooth: 0.09
+    - _ShadowStrength: 0.95
+    - _SmoothnessChannel: 0
+    - _SmoothnessMax: 0.995
+    - _SmoothnessMin: 0.94
+    - _SpecIntensity: 0.15
+    - _SpecNonMetalCap: 0.12
+    - _SpecPow: 18
+    - _SpecSoftness: 0.004
+    - _UsePacked: 0
+    m_Colors:
+    - _AmbientColor: {r: 0.34, g: 0.35, b: 0.38, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _DetailColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EyeShadowColor: {r: 0.54999995, g: 0.6, b: 0.75, a: 1}
+    - _IrisEdgeColor: {r: 0.2, g: 0.35, b: 0.5, a: 1}
+    - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0.09, g: 0.07, b: 0.1, a: 1}
+    - _RimColor: {r: 0.85, g: 0.92, b: 1, a: 1}
+    - _SDFST: {r: 1, g: 1, b: 0, a: 0}
+    - _ShadowTint: {r: 0.95, g: 0.95, b: 1, a: 1}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

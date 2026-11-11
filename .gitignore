@@ -1,0 +1,110 @@
+# ============================================================
+#  URP_Projects 版本控制分工
+#
+#  Git  → 代码、Shader、场景、材质、配置（文本，可 diff / 可合并 / 要 review）
+#  SVN  → 二进制资产（贴图、模型、动画、地形数据、截图），见下方 "美术资产" 段
+#
+#  判据不是"美术还是程序"，而是三条：
+#    1. 二进制、无法三方合并
+#    2. 单文件大、改一次多存一整份
+#    3. 需要加锁独占编辑
+#  满足任意两条 → SVN。
+#
+#  被 SVN 接管的路径必须在这里同步 ignore，两边绝不能同时跟踪同一个文件。
+#  完整说明见 VERSION_CONTROL.md
+# ============================================================
+
+# ============================================================
+#  美术资产（由 SVN 管理，Git 只留占位）
+#  ★ 改动这一节时，必须同步改 Tools/Setup-SvnArt.ps1 里的 $ArtPaths
+# ============================================================
+/Assets/TerrainSampleAssets/
+/Assets/Screenshots/
+/Assets/Characters/
+/Assets/Textures/
+/Assets/Models/
+/Assets/SkyCheck/
+/Assets/Animations/
+/Assets/Art/
+
+# Assets/Grass 是混合目录：代码/Shader/材质留在 Git，只有烘焙出来的
+# 二进制地形数据（GrassField.bytes、RoadMask.asset、GrassDensity.asset）走 SVN
+/Assets/Grass/Data/
+
+# 顶层开发截图（在 Assets 之外，Unity 不引用，纯过程记录）
+/Screenshots/
+
+# ---------- SVN 工作副本自身的元数据，绝不能进 Git ----------
+.svn/
+**/.svn/
+
+# ============================================================
+#  Unity 自动生成的缓存（删掉后 Unity 会自己重建）
+# ============================================================
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+*.raw
+
+# ---------- Unity 生成的 IDE 工程文件 ----------
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+*.sln.meta
+
+# ---------- 崩溃报告 ----------
+sysinfo.txt
+crashlytics-build.properties
+
+# ---------- 构建产物（发布走 Release 附件，别进仓库） ----------
+*.apk
+*.aab
+*.app
+*.unitypackage
+
+# ---------- 编辑器临时输出 ----------
+/.tmp/
+/obj/
+/NoisePreview/
+
+# ---------- IDE / 系统 ----------
+.idea/
+.vs/
+.vscode/
+*.swp
+*.bak
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ============================================================
+#  下面两类【故意没有】忽略，别加进去
+#  1. Assets/ 里的 .meta —— GUID 索引，丢了全部引用失效
+#  2. Packages/manifest.json + packages-lock.json —— 锁依赖版本
+# ============================================================

@@ -1,0 +1,97 @@
+# ============================================================
+#  Unity 项目的换行符与合并规则
+#
+#  注意：Unity 的 .unity / .prefab / .asset / .anim 既是"文本"又是
+#  "二进制"，取决于写这个文件时工程的序列化模式。所以这几类【不要】
+#  强制 text，交给 `* text=auto` 按内容自动判断：
+#    - Force Text 保存的场景 → 认作文本，正常 diff / 合并
+#    - 二进制场景（比如你现在的 Grass.unity）→ 认作二进制，原样存储
+#  如果硬写 `*.unity text`，git 会把二进制场景的 CRLF 改写掉，直接损坏文件。
+#
+#  原来的 `* text=auto` 保留下来是对的，但缺少对二进制资产的显式声明，
+#  补上下面这些才是完整的。
+# ============================================================
+
+* text=auto eol=lf
+
+# 说明：`eol=lf` 只对"被判定为文本"的文件生效。二进制（含二进制序列化的
+# .unity）由 text=auto 按内容识别后原样存储，不会被改写换行符。一行同时满足：
+#   - 文本（.cs / .meta / .asset / .mat / 文本场景）→ 仓库与工作区统一 LF，
+#     不再被 core.autocrlf=true 转成 CRLF，避免"假改动"和 diff 噪音
+#   - 二进制（Grass.unity / .tif / .fbx …）→ 完全不动
+
+# ---------- 源码 / 配置：统一 LF，跨平台不产生噪音 diff ----------
+*.cs         text eol=lf diff=csharp
+*.shader     text eol=lf
+*.cginc      text eol=lf
+*.hlsl       text eol=lf
+*.glsl       text eol=lf
+*.compute    text eol=lf
+*.asmdef     text eol=lf
+*.asmref     text eol=lf
+*.json       text eol=lf
+*.md         text eol=lf
+*.yml        text eol=lf
+*.yaml       text eol=lf
+*.xml        text eol=lf
+*.uss        text eol=lf
+*.uxml       text eol=lf
+*.rsp        text eol=lf
+*.gitignore  text eol=lf
+*.gitattributes text eol=lf
+
+# ---------- 二进制资产：显式声明，禁止任何转换 ----------
+*.png        binary
+*.jpg        binary
+*.jpeg       binary
+*.tga        binary
+*.tif        binary
+*.tiff       binary
+*.psd        binary
+*.exr        binary
+*.hdr        binary
+*.fbx        binary
+*.obj        binary
+*.blend      binary
+*.3ds        binary
+*.max        binary
+*.ma         binary
+*.mb         binary
+*.wav        binary
+*.mp3        binary
+*.ogg        binary
+*.mp4        binary
+*.mov        binary
+*.ttf        binary
+*.otf        binary
+*.pdf        binary
+*.dll        binary
+*.so         binary
+*.dylib      binary
+*.a          binary
+*.lib        binary
+*.exe        binary
+*.zip        binary
+*.7z         binary
+*.unitypackage binary
+
+# ============================================================
+#  Unity 官方 YAML 合并驱动（可选，多人协作强烈建议开）
+#
+#  .unity / .prefab / .asset 冲突时，让 Unity 自己三方合并，
+#  而不是让 git 把 YAML 拼坏。启用步骤：
+#
+#  1) 先把对应场景重新保存成文本（见下方说明），再在本文件末尾加：
+#       *.unity  text eol=lf merge=unityyamlmerge
+#       *.prefab text eol=lf merge=unityyamlmerge
+#       *.asset  text eol=lf merge=unityyamlmerge
+#
+#  2) 注册 driver（Windows，路径按你的 Unity 版本改）：
+#     git config --global merge.unityyamlmerge.name "Unity SmartMerge"
+#     git config --global merge.unityyamlmerge.driver '"C:/Program Files/Unity/Hub/Editor/2021.3.45f1/Editor/Data/Tools/UnityYAMLMerge.exe" merge -p %O %B %A %A'
+#     git config --global merge.unityyamlmerge.recursive binary
+#
+#  你的 Grass.unity 目前是二进制格式（2MB），说明它是在
+#  Asset Serialization 还不是 Force Text 的时候保存的。
+#  在 Unity 里打开它、Ctrl+S 重新保存一次就会转成文本格式。
+# ============================================================
