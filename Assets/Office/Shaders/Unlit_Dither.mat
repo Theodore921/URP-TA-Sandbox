@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Unlit_Dither
+  m_Shader: {fileID: 4800000, guid: e5dff091c27199b44aa5fb9d23848520, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _FFTDisplacementTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FFTFoamTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlowMap:
+        m_Texture: {fileID: 2800000, guid: 3341f87dd02ec104c89a378a9834c22d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlowNormalNFH:
+        m_Texture: {fileID: 2800000, guid: 39f05e67698900f4b9f9b3c2cea39449, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlowNormalNSH:
+        m_Texture: {fileID: 2800000, guid: 178db7db7eccf0f4e9070a08b52d7da1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FoamTex:
+        m_Texture: {fileID: 2800000, guid: a99b84c958ead164c855727c87d44ee8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 2f1c3fc08d246fd4798e4b2d08aa45db, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OceanNoiseTex:
+        m_Texture: {fileID: 2800000, guid: a99b84c958ead164c855727c87d44ee8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BeaufortScale: 0
+    - _CoarseSimulationTileDimension: 1
+    - _DepthEnd: 30
+    - _DepthPower: 1
+    - _DepthStart: 450
+    - _FlowSpeed: 0.2
+    - _FlowmapStrength: 0.009
+    - _FoamBaseLevel: 0.5
+    - _FoamBreakup: 0.7
+    - _FoamJacobianRange: 0.464
+    - _FoamJacobianThreshold: 1.418
+    - _Shades: 4
+    - _ShorelineFoamDensity: 0.5
+    - _ShorelineFoamStrength: 1
+    - _ShorelineFoamWidth: 5
+    - _StepHardness: 0.5
+    - _Tiling: 1
+    - _WaterNormalStrength: 1
+    m_Colors:
+    - _CloudinessColor: {r: 0.20852618, g: 0.6226415, b: 0.58924377, a: 1}
+    - _FFTDisplacementScale: {r: 1, g: 1, b: 1, a: 1}
+    - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
+    - _WaterColor: {r: 0.11347453, g: 0.9622642, b: 0.8047045, a: 1}
+    - _WaterNormalStrength: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
