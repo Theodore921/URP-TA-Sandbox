@@ -62,8 +62,8 @@ Material:
     - _FlowSpeed: 0.2
     - _FlowmapStrength: 0.009
     - _FoamBaseLevel: 0.5
-    - _FoamBreakup: 0.7
-    - _FoamJacobianRange: 0.464
+    - _FoamBreakup: 0.625
+    - _FoamJacobianRange: 0.583
     - _FoamJacobianThreshold: 1.418
     - _Shades: 4
     - _ShorelineFoamDensity: 0.5

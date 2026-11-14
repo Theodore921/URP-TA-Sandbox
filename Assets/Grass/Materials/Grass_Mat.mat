@@ -36,9 +36,9 @@ Material:
     - _BladeTintStrength: 0.28
     - _ColorBrightness: 1
     - _ColorRemap: 1
-    - _FadeEnd: 40
-    - _FadeStart: 28
-    - _FarBlendStrength: 0.45
+    - _FadeEnd: 120
+    - _FadeStart: 40
+    - _FarBlendStrength: 0.353
     - _FlutterFadeEnd: 30
     - _FlutterFadeStart: 10
     - _FlutterLength: 30
