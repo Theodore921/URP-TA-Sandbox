@@ -20,16 +20,16 @@
 # ============================================================
 /Assets/TerrainSampleAssets/
 /Assets/Screenshots/
-/Assets/Characters/
-/Assets/Textures/
-/Assets/Models/
+# /Assets/Characters/
+# /Assets/Textures/
+# /Assets/Models/
 /Assets/SkyCheck/
-/Assets/Animations/
+# /Assets/Animations/
 /Assets/Art/
 
 # Assets/Grass 是混合目录：代码/Shader/材质留在 Git，只有烘焙出来的
 # 二进制地形数据（GrassField.bytes、RoadMask.asset、GrassDensity.asset）走 SVN
-/Assets/Grass/Data/
+# /Assets/Grass/Data/
 
 # 顶层开发截图（在 Assets 之外，Unity 不引用，纯过程记录）
 /Screenshots/
