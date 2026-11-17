@@ -24,6 +24,8 @@ public class GrassScatterTool : EditorWindow
 
     int seed = 20261024;
     float sinkIntoGround = 0.03f;
+    float maxSlopeAngle = 45f;
+    float edgeMargin = 1.5f;
     string assetPath = "Assets/Grass/Data/GrassField.asset";
 
     Vector2 scroll;
@@ -60,6 +62,8 @@ public class GrassScatterTool : EditorWindow
             clumpYawSpread = 0.6f,
             seed = 20261024,
             sinkIntoGround = 0.03f,
+            maxSlopeAngle = 45f,
+            edgeMargin = 1.5f,
             assetPath = "Assets/Grass/Data/GrassField.asset"
         });
         if (data != null) Selection.activeObject = data;
@@ -86,6 +90,8 @@ public class GrassScatterTool : EditorWindow
         clumpSize       = EditorPrefs.GetFloat("GrassScatter.clumpSize", clumpSize);
         clumpYawSpread  = EditorPrefs.GetFloat("GrassScatter.clumpYawSpread", clumpYawSpread);
         sinkIntoGround  = EditorPrefs.GetFloat("GrassScatter.sink", sinkIntoGround);
+        maxSlopeAngle   = EditorPrefs.GetFloat("GrassScatter.maxSlopeAngle", maxSlopeAngle);
+        edgeMargin      = EditorPrefs.GetFloat("GrassScatter.edgeMargin", edgeMargin);
         seed            = EditorPrefs.GetInt("GrassScatter.seed", seed);
         assetPath       = EditorPrefs.GetString("GrassScatter.path", assetPath);
     }
@@ -101,6 +107,8 @@ public class GrassScatterTool : EditorWindow
         EditorPrefs.SetFloat("GrassScatter.clumpSize", clumpSize);
         EditorPrefs.SetFloat("GrassScatter.clumpYawSpread", clumpYawSpread);
         EditorPrefs.SetFloat("GrassScatter.sink", sinkIntoGround);
+        EditorPrefs.SetFloat("GrassScatter.maxSlopeAngle", maxSlopeAngle);
+        EditorPrefs.SetFloat("GrassScatter.edgeMargin", edgeMargin);
         EditorPrefs.SetInt("GrassScatter.seed", seed);
         EditorPrefs.SetString("GrassScatter.path", assetPath);
     }
@@ -118,6 +126,8 @@ public class GrassScatterTool : EditorWindow
         clumpYawSpread = clumpYawSpread,
         seed = seed,
         sinkIntoGround = sinkIntoGround,
+        maxSlopeAngle = maxSlopeAngle,
+        edgeMargin = edgeMargin,
         assetPath = assetPath
     };
 
@@ -127,7 +137,7 @@ public class GrassScatterTool : EditorWindow
 
         EditorGUILayout.HelpBox(
             "按密度在地形上撒点并烘焙成 GrassFieldData。\n" +
-            "密度用「离中心距离」做径向衰减：近处密、远处稀，总量直接决定性能。",
+            "密度用「离中心距离」做径向衰减；过陡坡面与 Terrain 边缘留白区域不会生成草。",
             MessageType.Info);
 
         terrain = (Terrain)EditorGUILayout.ObjectField("地形", terrain, typeof(Terrain), true);
@@ -138,6 +148,17 @@ public class GrassScatterTool : EditorWindow
             EditorGUILayout.EndScrollView();
             return;
         }
+
+        var paintMask = terrain.GetComponent<GrassPaintMask>();
+        if (paintMask != null && paintMask.distributionMask != null)
+            EditorGUILayout.HelpBox("当前 Terrain 已启用草地分布绘制图。绘制权重会叠加在径向密度衰减上；未绘制区域不会生成草。",
+                                    MessageType.Info);
+        else
+            EditorGUILayout.HelpBox("也可以先打开草地分布绘制工具，在 Terrain 上绘制草的区域。",
+                                    MessageType.None);
+
+        if (GUILayout.Button("打开草地分布绘制工具"))
+            GrassPaintTool.Open();
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("密度", EditorStyles.boldLabel);
@@ -156,6 +177,14 @@ public class GrassScatterTool : EditorWindow
         EditorGUILayout.Space();
         seed = EditorGUILayout.IntField("随机种子", seed);
         sinkIntoGround = EditorGUILayout.FloatField("陷入地面（米）", sinkIntoGround);
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("地形过滤", EditorStyles.boldLabel);
+        maxSlopeAngle = EditorGUILayout.Slider("最大坡度（度）", maxSlopeAngle, 0f, 89f);
+        edgeMargin = EditorGUILayout.Slider("边缘留白（米）", edgeMargin, 0f,
+            terrain != null && terrain.terrainData != null
+                ? Mathf.Min(terrain.terrainData.size.x, terrain.terrainData.size.z) * 0.5f
+                : 20f);
         assetPath = EditorGUILayout.TextField("输出资产", assetPath);
 
         EditorGUILayout.Space();

@@ -27,6 +27,8 @@ public struct GrassBakeParams
     public float clumpYawSpread;
     public int seed;
     public float sinkIntoGround;
+    public float maxSlopeAngle;
+    public float edgeMargin;
     public string assetPath;
 }
 
@@ -47,6 +49,30 @@ public static class GrassBaker
         float x0 = center.x - half, z0 = center.z - half;
         int cells = Mathf.CeilToInt(2f * half / step);
         int placed = 0;
+        float maxSlopeAngle = Mathf.Clamp(p.maxSlopeAngle, 0f, 89.9f);
+        float edgeMargin = Mathf.Max(0f, p.edgeMargin);
+        Vector3 terrainPosition = t.transform.position;
+        Vector3 terrainScale = t.transform.lossyScale;
+        float terrainWidth = Mathf.Max(t.terrainData.size.x * Mathf.Abs(terrainScale.x), 0.001f);
+        float terrainLength = Mathf.Max(t.terrainData.size.z * Mathf.Abs(terrainScale.z), 0.001f);
+        Color32[] paintPixels = null;
+        int paintWidth = 0;
+        int paintHeight = 0;
+        var paintMask = t.GetComponent<GrassPaintMask>();
+        if (paintMask != null && paintMask.distributionMask != null)
+        {
+            try
+            {
+                paintPixels = paintMask.distributionMask.GetPixels32();
+                paintWidth = paintMask.distributionMask.width;
+                paintHeight = paintMask.distributionMask.height;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("[草地] 草地分布图不可读，无法烘焙：" + e.Message);
+                return null;
+            }
+        }
 
         // ── 道路掩码：路面上不长草 ──────────────────────────────────────────
         var road = UnityEngine.Object.FindObjectOfType<GrassRoadPath>();
@@ -76,9 +102,18 @@ public static class GrassBaker
                 float x = x0 + (ix + (float)rng.NextDouble()) * step;
                 float z = z0 + (iz + (float)rng.NextDouble()) * step;
 
+                if (!IsSuitableTerrainPosition(t, x, z, edgeMargin, maxSlopeAngle))
+                    continue;
+
                 float dx = x - center.x, dz = z - center.z;
                 float r = Mathf.Sqrt(dx * dx + dz * dz);
                 float dens = DensityAt(p, r);
+                if (paintPixels != null)
+                {
+                    float u = (x - terrainPosition.x) / terrainWidth;
+                    float v = (z - terrainPosition.z) / terrainLength;
+                    dens *= SamplePaintMask(paintPixels, paintWidth, paintHeight, u, v);
+                }
                 if (dens <= 0f) continue;
 
                 // 以近处密度为基准拒绝采样 → 平滑的径向衰减
@@ -330,15 +365,85 @@ public static class GrassBaker
         Vector3 center = t.transform.position + t.terrainData.size * 0.5f;
         float half = Mathf.Min(t.terrainData.size.x, t.terrainData.size.z) * 0.5f;
         float step = 1f / Mathf.Sqrt(Mathf.Max(p.densityNear, 0.01f));
-
-        double sum = 0;
-        for (float x = center.x - half; x < center.x + half; x += step)
-        for (float z = center.z - half; z < center.z + half; z += step)
+        float sampleStep = Mathf.Max(step, 1f);
+        float maxSlopeAngle = Mathf.Clamp(p.maxSlopeAngle, 0f, 89.9f);
+        float edgeMargin = Mathf.Max(0f, p.edgeMargin);
+        Vector3 terrainPosition = t.transform.position;
+        Vector3 terrainScale = t.transform.lossyScale;
+        float terrainWidth = Mathf.Max(t.terrainData.size.x * Mathf.Abs(terrainScale.x), 0.001f);
+        float terrainLength = Mathf.Max(t.terrainData.size.z * Mathf.Abs(terrainScale.z), 0.001f);
+        Color32[] paintPixels = null;
+        int paintWidth = 0;
+        int paintHeight = 0;
+        var paintMask = t.GetComponent<GrassPaintMask>();
+        if (paintMask != null && paintMask.distributionMask != null)
         {
+            paintPixels = paintMask.distributionMask.GetPixels32();
+            paintWidth = paintMask.distributionMask.width;
+            paintHeight = paintMask.distributionMask.height;
+        }
+        double sum = 0;
+        for (float x = center.x - half + sampleStep * 0.5f; x < center.x + half; x += sampleStep)
+        for (float z = center.z - half + sampleStep * 0.5f; z < center.z + half; z += sampleStep)
+        {
+            if (!IsSuitableTerrainPosition(t, x, z, edgeMargin, maxSlopeAngle))
+                continue;
+
             float r = Mathf.Sqrt((x - center.x) * (x - center.x) + (z - center.z) * (z - center.z));
-            sum += DensityAt(p, r) / p.densityNear;
+            float density = DensityAt(p, r);
+            if (paintPixels != null)
+            {
+                float u = (x - terrainPosition.x) / terrainWidth;
+                float v = (z - terrainPosition.z) / terrainLength;
+                density *= SamplePaintMask(paintPixels, paintWidth, paintHeight, u, v);
+            }
+            sum += density * sampleStep * sampleStep;
         }
         return (float)sum;
+    }
+
+    static float SamplePaintMask(Color32[] pixels, int width, int height, float u, float v)
+    {
+        if (pixels == null || width <= 0 || height <= 0 || pixels.Length < width * height ||
+            u < 0f || u > 1f || v < 0f || v > 1f)
+            return 0f;
+
+        float x = u * (width - 1);
+        float y = v * (height - 1);
+        int x0 = Mathf.FloorToInt(x);
+        int y0 = Mathf.FloorToInt(y);
+        int x1 = Mathf.Min(x0 + 1, width - 1);
+        int y1 = Mathf.Min(y0 + 1, height - 1);
+        float tx = x - x0;
+        float ty = y - y0;
+        float a = Mathf.Lerp(pixels[y0 * width + x0].r,
+                             pixels[y0 * width + x1].r, tx);
+        float b = Mathf.Lerp(pixels[y1 * width + x0].r,
+                             pixels[y1 * width + x1].r, tx);
+        return Mathf.Lerp(a, b, ty) / 255f;
+    }
+
+    static bool IsSuitableTerrainPosition(Terrain terrain, float worldX, float worldZ,
+                                          float edgeMargin, float maxSlopeAngle)
+    {
+        var terrainData = terrain.terrainData;
+        Vector3 terrainPosition = terrain.transform.position;
+        Vector3 terrainScale = terrain.transform.lossyScale;
+        float width = terrainData.size.x * Mathf.Abs(terrainScale.x);
+        float length = terrainData.size.z * Mathf.Abs(terrainScale.z);
+        if (width <= 0f || length <= 0f)
+            return false;
+
+        float u = (worldX - terrainPosition.x) / width;
+        float v = (worldZ - terrainPosition.z) / length;
+        float marginU = Mathf.Clamp(edgeMargin, 0f, width * 0.5f) / width;
+        float marginV = Mathf.Clamp(edgeMargin, 0f, length * 0.5f) / length;
+        if (u < marginU || u > 1f - marginU || v < marginV || v > 1f - marginV)
+            return false;
+
+        Vector3 localNormal = terrainData.GetInterpolatedNormal(u, v);
+        Vector3 worldNormal = terrain.transform.TransformDirection(localNormal).normalized;
+        return Vector3.Angle(worldNormal, Vector3.up) <= maxSlopeAngle;
     }
 
     static float Hash01(int x, int z, int seed, int salt)

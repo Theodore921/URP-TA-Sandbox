@@ -16,329 +16,309 @@ MonoBehaviour:
   fieldSize: {x: 200, y: 200}
   densityNear: 160
   densityFar: 28
-  radiusNear: 14
-  radiusFar: 150
+  radiusNear: 20
+  radiusFar: 120
   clumpSize: 2.5
   seed: 20261024
   binary: {fileID: 4900000, guid: c69d85c1a96dadb4c8352f9e0f56c424, type: 3}
   chunks:
-  - coord: {x: -4, y: -4}
-    center: {x: -12, y: 25, z: -12}
-    radius: 22.6272
-    start: 0
-    count: 360
   - coord: {x: -4, y: -3}
     center: {x: -12, y: 25, z: 20}
     radius: 22.6272
-    start: 360
-    count: 4035
+    start: 0
+    count: 309
   - coord: {x: -4, y: -2}
     center: {x: -12, y: 25, z: 52}
     radius: 22.6272
-    start: 4395
-    count: 5224
+    start: 309
+    count: 1431
   - coord: {x: -4, y: -1}
     center: {x: -12, y: 25, z: 84}
     radius: 22.6272
-    start: 9619
-    count: 6048
+    start: 1740
+    count: 1711
   - coord: {x: -4, y: 0}
     center: {x: -12, y: 25, z: 116}
     radius: 22.6272
-    start: 15667
-    count: 6080
+    start: 3451
+    count: 2676
   - coord: {x: -4, y: 1}
     center: {x: -12, y: 25, z: 148}
     radius: 22.6272
-    start: 21747
-    count: 5227
+    start: 6127
+    count: 2263
   - coord: {x: -4, y: 2}
     center: {x: -12, y: 25, z: 180}
     radius: 22.6272
-    start: 26974
-    count: 3950
-  - coord: {x: -4, y: 3}
-    center: {x: -12, y: 25, z: 212}
-    radius: 22.6272
-    start: 30924
-    count: 382
+    start: 8390
+    count: 331
   - coord: {x: -3, y: -4}
     center: {x: 20, y: 25, z: -12}
     radius: 22.6272
-    start: 31306
-    count: 3842
+    start: 8721
+    count: 281
   - coord: {x: -3, y: -3}
     center: {x: 20, y: 25, z: 20}
     radius: 22.6272
-    start: 35148
-    count: 39711
+    start: 9002
+    count: 14777
   - coord: {x: -3, y: -2}
     center: {x: 20, y: 25, z: 52}
     radius: 22.6272
-    start: 74859
-    count: 52139
+    start: 23779
+    count: 29413
   - coord: {x: -3, y: -1}
     center: {x: 20, y: 25, z: 84}
     radius: 22.6272
-    start: 126998
-    count: 34021
+    start: 53192
+    count: 37409
   - coord: {x: -3, y: 0}
     center: {x: 20, y: 25, z: 116}
     radius: 22.6272
-    start: 161019
-    count: 41602
+    start: 90601
+    count: 27160
   - coord: {x: -3, y: 1}
     center: {x: 20, y: 25, z: 148}
     radius: 22.6272
-    start: 202621
-    count: 51363
+    start: 117761
+    count: 29086
   - coord: {x: -3, y: 2}
     center: {x: 20, y: 25, z: 180}
     radius: 22.6272
-    start: 253984
-    count: 39731
+    start: 146847
+    count: 16735
   - coord: {x: -3, y: 3}
     center: {x: 20, y: 25, z: 212}
     radius: 22.6272
-    start: 293715
-    count: 4045
+    start: 163582
+    count: 350
   - coord: {x: -2, y: -4}
     center: {x: 52, y: 25, z: -12}
     radius: 22.6272
-    start: 297760
-    count: 5247
+    start: 163932
+    count: 1873
   - coord: {x: -2, y: -3}
     center: {x: 52, y: 25, z: 20}
     radius: 22.6272
-    start: 303007
-    count: 51839
+    start: 165805
+    count: 22881
   - coord: {x: -2, y: -2}
     center: {x: 52, y: 25, z: 52}
     radius: 22.6272
-    start: 354846
-    count: 62522
+    start: 188686
+    count: 31241
   - coord: {x: -2, y: -1}
     center: {x: 52, y: 25, z: 84}
     radius: 22.6272
-    start: 417368
-    count: 55221
+    start: 219927
+    count: 45840
   - coord: {x: -2, y: 0}
     center: {x: 52, y: 25, z: 116}
     radius: 22.6272
-    start: 472589
-    count: 37690
+    start: 265767
+    count: 48135
   - coord: {x: -2, y: 1}
     center: {x: 52, y: 25, z: 148}
     radius: 22.6272
-    start: 510279
-    count: 42708
+    start: 313902
+    count: 40273
   - coord: {x: -2, y: 2}
     center: {x: 52, y: 25, z: 180}
     radius: 22.6272
-    start: 552987
-    count: 28138
+    start: 354175
+    count: 33816
   - coord: {x: -2, y: 3}
     center: {x: 52, y: 25, z: 212}
     radius: 22.6272
-    start: 581125
-    count: 1535
+    start: 387991
+    count: 2562
   - coord: {x: -1, y: -4}
     center: {x: 84, y: 25, z: -12}
     radius: 22.6272
-    start: 582660
-    count: 6000
+    start: 390553
+    count: 2100
   - coord: {x: -1, y: -3}
     center: {x: 84, y: 25, z: 20}
     radius: 22.6272
-    start: 588660
-    count: 59033
+    start: 392653
+    count: 37463
   - coord: {x: -1, y: -2}
     center: {x: 84, y: 25, z: 52}
     radius: 22.6272
-    start: 647693
-    count: 77643
+    start: 430116
+    count: 45255
   - coord: {x: -1, y: -1}
     center: {x: 84, y: 25, z: 84}
     radius: 22.6272
-    start: 725336
-    count: 65247
+    start: 475371
+    count: 67680
   - coord: {x: -1, y: 0}
     center: {x: 84, y: 25, z: 116}
     radius: 22.6272
-    start: 790583
-    count: 52238
+    start: 543051
+    count: 59177
   - coord: {x: -1, y: 1}
     center: {x: 84, y: 25, z: 148}
     radius: 22.6272
-    start: 842821
-    count: 56397
+    start: 602228
+    count: 53026
   - coord: {x: -1, y: 2}
     center: {x: 84, y: 25, z: 180}
     radius: 22.6272
-    start: 899218
-    count: 42854
+    start: 655254
+    count: 43874
   - coord: {x: -1, y: 3}
     center: {x: 84, y: 25, z: 212}
     radius: 22.6272
-    start: 942072
-    count: 5296
+    start: 699128
+    count: 3228
   - coord: {x: 0, y: -4}
     center: {x: 116, y: 25, z: -12}
     radius: 22.6272
-    start: 947368
-    count: 6164
+    start: 702356
+    count: 3046
   - coord: {x: 0, y: -3}
     center: {x: 116, y: 25, z: 20}
     radius: 22.6272
-    start: 953532
-    count: 40741
+    start: 705402
+    count: 40252
   - coord: {x: 0, y: -2}
     center: {x: 116, y: 25, z: 52}
     radius: 22.6272
-    start: 994273
-    count: 26200
+    start: 745654
+    count: 60171
   - coord: {x: 0, y: -1}
     center: {x: 116, y: 25, z: 84}
     radius: 22.6272
-    start: 1020473
-    count: 40068
+    start: 805825
+    count: 68125
   - coord: {x: 0, y: 0}
     center: {x: 116, y: 25, z: 116}
     radius: 22.6272
-    start: 1060541
-    count: 63707
+    start: 873950
+    count: 62786
   - coord: {x: 0, y: 1}
     center: {x: 116, y: 25, z: 148}
     radius: 22.6272
-    start: 1124248
-    count: 77844
+    start: 936736
+    count: 56925
   - coord: {x: 0, y: 2}
     center: {x: 116, y: 25, z: 180}
     radius: 22.6272
-    start: 1202092
-    count: 58940
+    start: 993661
+    count: 38498
   - coord: {x: 0, y: 3}
     center: {x: 116, y: 25, z: 212}
     radius: 22.6272
-    start: 1261032
-    count: 6148
+    start: 1032159
+    count: 3250
   - coord: {x: 1, y: -4}
     center: {x: 148, y: 25, z: -12}
     radius: 22.6272
-    start: 1267180
-    count: 5325
+    start: 1035409
+    count: 2500
   - coord: {x: 1, y: -3}
     center: {x: 148, y: 25, z: 20}
     radius: 22.6272
-    start: 1272505
-    count: 50241
+    start: 1037909
+    count: 38674
   - coord: {x: 1, y: -2}
     center: {x: 148, y: 25, z: 52}
     radius: 22.6272
-    start: 1322746
-    count: 38868
+    start: 1076583
+    count: 55278
   - coord: {x: 1, y: -1}
     center: {x: 148, y: 25, z: 84}
     radius: 22.6272
-    start: 1361614
-    count: 46681
+    start: 1131861
+    count: 48879
   - coord: {x: 1, y: 0}
     center: {x: 148, y: 25, z: 116}
     radius: 22.6272
-    start: 1408295
-    count: 77125
+    start: 1180740
+    count: 42064
   - coord: {x: 1, y: 1}
     center: {x: 148, y: 25, z: 148}
     radius: 22.6272
-    start: 1485420
-    count: 67421
+    start: 1222804
+    count: 29788
   - coord: {x: 1, y: 2}
     center: {x: 148, y: 25, z: 180}
     radius: 22.6272
-    start: 1552841
-    count: 52003
+    start: 1252592
+    count: 38902
   - coord: {x: 1, y: 3}
     center: {x: 148, y: 25, z: 212}
     radius: 22.6272
-    start: 1604844
-    count: 5204
+    start: 1291494
+    count: 2538
   - coord: {x: 2, y: -4}
     center: {x: 180, y: 25, z: -12}
     radius: 22.6272
-    start: 1610048
-    count: 4008
+    start: 1294032
+    count: 317
   - coord: {x: 2, y: -3}
     center: {x: 180, y: 25, z: 20}
     radius: 22.6272
-    start: 1614056
-    count: 39790
+    start: 1294349
+    count: 10768
   - coord: {x: 2, y: -2}
     center: {x: 180, y: 25, z: 52}
     radius: 22.6272
-    start: 1653846
-    count: 52160
+    start: 1305117
+    count: 19679
   - coord: {x: 2, y: -1}
     center: {x: 180, y: 25, z: 84}
     radius: 22.6272
-    start: 1706006
-    count: 59429
+    start: 1324796
+    count: 11879
   - coord: {x: 2, y: 0}
     center: {x: 180, y: 25, z: 116}
     radius: 22.6272
-    start: 1765435
-    count: 58858
+    start: 1336675
+    count: 22292
   - coord: {x: 2, y: 1}
     center: {x: 180, y: 25, z: 148}
     radius: 22.6272
-    start: 1824293
-    count: 51584
+    start: 1358967
+    count: 20335
   - coord: {x: 2, y: 2}
     center: {x: 180, y: 25, z: 180}
     radius: 22.6272
-    start: 1875877
-    count: 39425
+    start: 1379302
+    count: 16669
   - coord: {x: 2, y: 3}
     center: {x: 180, y: 25, z: 212}
     radius: 22.6272
-    start: 1915302
-    count: 3991
-  - coord: {x: 3, y: -4}
-    center: {x: 212, y: 25, z: -12}
-    radius: 22.6272
-    start: 1919293
-    count: 371
+    start: 1395971
+    count: 347
   - coord: {x: 3, y: -3}
     center: {x: 212, y: 25, z: 20}
     radius: 22.6272
-    start: 1919664
-    count: 4004
+    start: 1396318
+    count: 55
   - coord: {x: 3, y: -2}
     center: {x: 212, y: 25, z: 52}
     radius: 22.6272
-    start: 1923668
-    count: 5272
+    start: 1396373
+    count: 1746
   - coord: {x: 3, y: -1}
     center: {x: 212, y: 25, z: 84}
     radius: 22.6272
-    start: 1928940
-    count: 6062
+    start: 1398119
+    count: 2063
   - coord: {x: 3, y: 0}
     center: {x: 212, y: 25, z: 116}
     radius: 22.6272
-    start: 1935002
-    count: 5965
+    start: 1400182
+    count: 2890
   - coord: {x: 3, y: 1}
     center: {x: 212, y: 25, z: 148}
     radius: 22.6272
-    start: 1940967
-    count: 5315
+    start: 1403072
+    count: 1108
   - coord: {x: 3, y: 2}
     center: {x: 212, y: 25, z: 180}
     radius: 22.6272
-    start: 1946282
-    count: 3987
-  - coord: {x: 3, y: 3}
-    center: {x: 212, y: 25, z: 212}
-    radius: 22.6272
-    start: 1950269
-    count: 394
+    start: 1404180
+    count: 327
