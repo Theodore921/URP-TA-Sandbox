@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CliffBlend_rock_face_02
+  m_Shader: {fileID: 4800000, guid: 3b6af0c14eebc38468c5f2353ab7ba11, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 7b6312631c6257547b724d6b25b4fa63, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: ae62c8c410894c04c8772e347491f27e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GroundMap:
+        m_Texture: {fileID: 2800000, guid: f50658103ac20d14eba7b86b467fa82d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RoughnessMap:
+        m_Texture: {fileID: 2800000, guid: 70beeb756f42f8043ac5ae6127c34ce8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BlendEnd: 0.8
+    - _BlendStart: -0.25
+    - _BumpScale: 1
+    - _Exposure: 0.061
+    - _GroundTiling: 8
+    - _Saturation: 0.3
+    - _Smoothness: 0.5
+    m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _GroundOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _GroundTint: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

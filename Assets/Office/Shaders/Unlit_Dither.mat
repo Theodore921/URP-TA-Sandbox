@@ -73,9 +73,9 @@ Material:
     - _Tiling: 1
     - _WaterNormalStrength: 1
     m_Colors:
-    - _CloudinessColor: {r: 0.20852618, g: 0.6226415, b: 0.58924377, a: 1}
+    - _CloudinessColor: {r: 0, g: 0.8384061, b: 1, a: 1}
     - _FFTDisplacementScale: {r: 1, g: 1, b: 1, a: 1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
-    - _WaterColor: {r: 0.11347453, g: 0.9622642, b: 0.8047045, a: 1}
+    - _WaterColor: {r: 0.0047169924, g: 0.6898207, b: 1, a: 1}
     - _WaterNormalStrength: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

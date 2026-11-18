@@ -59,7 +59,7 @@ Material:
     - _CloudPlanar: 1
     - _CloudPlaneHeight: 800
     - _CloudPlaneY: 4.5
-    - _CloudRotationSpeed: 2
+    - _CloudRotationSpeed: 0.4
     - _CloudScale: 0.0004
     - _CloudShadowAbsorb: 1.19
     - _CloudShadowFloor: 0.15

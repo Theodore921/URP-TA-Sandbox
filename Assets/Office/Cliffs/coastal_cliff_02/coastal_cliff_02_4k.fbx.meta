@@ -3,7 +3,12 @@ guid: e100a2c4ee595c64888edae009175918
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: coastal_cliff_02
+    second: {fileID: 2100000, guid: 03dd160db2e6aad4da8b5ecfddd4b0e7, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
