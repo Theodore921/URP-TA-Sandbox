@@ -29,7 +29,7 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: "Avatar Rig Configuration mis-match. Inbetween bone rotation
       in configuration does not match rotation in animation file:\n\t'\u8155\u6369.L'
-      : rotation error = 18.649485 deg\n\t'\u8155\u6369.R' : rotation error = 18.649542
+      : rotation error = 18.649479 deg\n\t'\u8155\u6369.R' : rotation error = 18.649540
       deg\n"
     animationImportErrors: 
     animationImportWarnings: 
@@ -1012,7 +1012,7 @@ ModelImporter:
     - name: "\u80A9.L"
       parentName: "\u80A9P.L"
       position: {x: -1.6059579e-10, y: 0.00000011956253, z: -9.822404e-11}
-      rotation: {x: -0.8126894, y: -0.013545183, z: -0.007762204, w: 0.5824879}
+      rotation: {x: -0.8126894, y: -0.013545184, z: -0.007762204, w: 0.58248794}
       scale: {x: 1, y: 1.0000001, z: 1}
     - name: L_collarB_01_jnt
       parentName: "\u80A9.L"
@@ -1032,7 +1032,7 @@ ModelImporter:
     - name: "\u8155.L"
       parentName: "\u80A9C.L"
       position: {x: -6.1617794e-11, y: -0.00000000963613, z: -4.427534e-10}
-      rotation: {x: 0.5753633, y: -0.39639282, z: -0.56993234, w: -0.43244323}
+      rotation: {x: 0.5753632, y: -0.39639276, z: -0.5699323, w: -0.43244317}
       scale: {x: 1.0000004, y: 1, z: 1.0000001}
     - name: "_shadow_\u8155\u63691.L"
       parentName: "\u8155.L"
@@ -1057,7 +1057,7 @@ ModelImporter:
     - name: "\u3072\u3058.L"
       parentName: "\u8155\u6369.L"
       position: {x: -0.0000000018626451, y: 0.10219188, z: 0.00000010301415}
-      rotation: {x: -0.012933084, y: 0.0050680325, z: 0.00079293345, w: 0.9999032}
+      rotation: {x: -0.012933084, y: 0.005068033, z: 0.00079293345, w: 0.99990326}
       scale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
     - name: "_shadow_\u624B\u63691.L"
       parentName: "\u3072\u3058.L"
@@ -1233,7 +1233,7 @@ ModelImporter:
     - name: "\u80A9.R"
       parentName: "\u80A9P.R"
       position: {x: 0.0000000021565143, y: 0.000000119144836, z: 0.0000000017644188}
-      rotation: {x: 0.8126899, y: 0.013545273, z: -0.007762405, w: 0.5824872}
+      rotation: {x: 0.8126899, y: 0.013545274, z: -0.007762405, w: 0.5824873}
       scale: {x: 1.0000001, y: 1, z: 0.9999998}
     - name: R_collarB_01_jnt
       parentName: "\u80A9.R"
@@ -2958,7 +2958,7 @@ ModelImporter:
     - name: "\u4FA7\u88D9_1_2"
       parentName: "\u4FA7\u88D9_0_2"
       position: {x: 0.000000031664968, y: 0.024572022, z: 0.0000000037252903}
-      rotation: {x: 0.0025804741, y: -0.0007525152, z: -0.00013768043, w: 0.99999636}
+      rotation: {x: 0.0025804744, y: -0.0007525152, z: -0.00013768044, w: 0.99999636}
       scale: {x: 0.9999999, y: 1, z: 1}
     - name: "\u4FA7\u88D9_2_2"
       parentName: "\u4FA7\u88D9_1_2"
@@ -3008,7 +3008,7 @@ ModelImporter:
     - name: "\u4FA7\u88D9_1_3"
       parentName: "\u4FA7\u88D9_0_3"
       position: {x: 0.000000027008355, y: 0.025394795, z: -0.000000009778887}
-      rotation: {x: -0.0025865398, y: -0.000103384715, z: 0.0012778199, w: 0.9999958}
+      rotation: {x: -0.00258654, y: -0.000103384715, z: 0.00127782, w: 0.9999958}
       scale: {x: 1, y: 1.0000001, z: 1}
     - name: "\u4FA7\u88D9_2_3"
       parentName: "\u4FA7\u88D9_1_3"
@@ -3861,7 +3861,7 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: "\u3072\u3056D.L"
       parentName: "\u8DB3D.L"
-      position: {x: -0.00000031026158, y: -0.39080584, z: -0.0008213684}
+      position: {x: -0, y: -0.391, z: 0.001}
       rotation: {x: 0.00000007348717, y: -0.000000030776178, z: -0.00000040036502,
         w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -3887,7 +3887,7 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: "\u3072\u3056D.R"
       parentName: "\u8DB3D.R"
-      position: {x: -0.00000039966852, y: -0.39080548, z: -0.0008213675}
+      position: {x: -0, y: -0.3908, z: 0.0181}
       rotation: {x: 0.00000007348717, y: -0.000000030776178, z: -0.00000040036502,
         w: 1}
       scale: {x: 1, y: 1, z: 1}
