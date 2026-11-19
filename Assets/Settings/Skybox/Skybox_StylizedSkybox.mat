@@ -68,7 +68,7 @@ Material:
     - _CloudSoftness: 0.54
     - _CloudSunIntensity: 1
     - _CloudWarp: 0.04
-    - _Exposure: 1
+    - _Exposure: 0.772968
     - _GroundSharpness: 0.05
     - _HorizonContribution: 0.5
     - _HorizonLineExponent: 64

@@ -9,7 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: LZ_Face
   m_Shader: {fileID: 4800000, guid: 01c87a61fffab8f4a8f9f922935835a7, type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _FACE_SDF_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -57,7 +58,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ShadowRamp:
-        m_Texture: {fileID: 2800000, guid: 78a1573b728153d4fb0ad2abbab7be65, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -66,7 +67,7 @@ Material:
     - _AOStrength: 1
     - _AlphaTest: 0
     - _AmbientFloor: 0.7
-    - _CastShadowStrength: 0.85
+    - _CastShadowStrength: 0
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailStrength: 0
@@ -77,6 +78,7 @@ Material:
     - _EyeSpecPower: 90
     - _FaceAnalytic: 0
     - _FaceSDFDebug: 0
+    - _FaceSDFOn: 1
     - _FaceSDFUV: 0
     - _HairSpecIntensity: 1.2
     - _HairSpecMapStrength: 1

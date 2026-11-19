@@ -96,10 +96,11 @@ Shader "Custom/ToonCharacter"
 
         [Header(Face SDF)]
         _FaceAnalytic ("Face Analytic Shading (no SDF tex)", Range(0,1)) = 0
+        [Toggle(_FACE_SDF_ON)] _FaceSDFOn ("Use Face SDF", Float) = 0
         [NoScaleOffset]_FaceSDF ("Face SDF (R = shadow boundary)", 2D) = "black" {}
         _FaceSDFUV ("Face SDF UV Set (0=UV0 1=UV1)", Range(0,1)) = 0
         _SDFST ("SDF Tiling (xy) Offset (zw)", Vector) = (1,1,0,0)
-        _FaceSDFDebug ("Face SDF Debug", Range(0,1)) = 0
+        [Enum(Off,0,Face_Lit,1,Raw_SDF,2)] _FaceSDFDebug ("Face SDF Debug", Float) = 0
         _SDFSmooth ("SDF Edge Softness", Range(0.001,0.3)) = 0.03
         _SDFOffset ("SDF Angle Offset", Range(-1,1)) = 0
         _SDFFlip ("SDF Flip Base", Range(0,1)) = 1
@@ -432,33 +433,46 @@ Shader "Custom/ToonCharacter"
             sp.boost = lerp(1.0, _MetallicSpecBoost, metal01);
             sp.metal = metal01;
 
-            // 主光
-            float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS);
-            Light mainLight = GetMainLight(shadowCoord);
+            // SDF controls face shading directly; do not sample the main-light shadow map.
+            #if defined(_FACE_SDF_ON)
+                Light mainLight = GetMainLight();
+            #else
+                float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS);
+                Light mainLight = GetMainLight(shadowCoord);
+            #endif
 
             float mainRampT = ToonRampCoord(dot(normalWS, mainLight.direction));
+            float rawSDF = 0.0;
+            float faceLit = 0.0;
             #if defined(_FACE_SDF_ON)
-                float rawSDF = 0.0;
-                float faceLit = FaceSDFLit(input.uv, input.uv1, mainLight.direction, rawSDF);
-                if (_FaceSDFDebug > 1.5)
-                {
-                    return float4(rawSDF, rawSDF, rawSDF, 1.0);
-                }
+                faceLit = FaceSDFLit(input.uv, input.uv1, mainLight.direction, rawSDF);
+                mainRampT = faceLit;
+            #else
                 if (_FaceSDFDebug > 0.5)
                 {
-                    return float4(faceLit, faceLit, faceLit, 1.0);
+                    faceLit = FaceSDFLit(input.uv, input.uv1, mainLight.direction, rawSDF);
                 }
-                mainRampT = faceLit;
             #endif
+
+            if (_FaceSDFDebug > 1.5)
+            {
+                return float4(rawSDF, rawSDF, rawSDF, 1.0);
+            }
+            if (_FaceSDFDebug > 0.5)
+            {
+                return float4(faceLit, faceLit, faceLit, 1.0);
+            }
 
             // 没有 SDF 贴图时（例如 Lizhiyan），用"光相对脸朝向"的解析式代替，
             // 得到一条整体的软边界，而不是球面 N·L 那种脸部圆柱感
+            #if !defined(_FACE_SDF_ON)
             if (_FaceAnalytic > 0.5)
             {
                 float3 faceFrontWS = normalize(TransformObjectToWorldDir(float3(0.0, 0.0, 1.0)));
                 float3 analyticLight = normalize(mainLight.direction + float3(0.0, -0.10, 0.0));
                 mainRampT = smoothstep(-0.05, 0.45, dot(analyticLight, faceFrontWS));
             }
+            #endif
 
             float3 color = ToonLightContribution(
                 albedo, normalWS, viewDirWS,
@@ -467,6 +481,7 @@ Shader "Custom/ToonCharacter"
                 sp, ao, shadowTexV);
 
             // 附加光（点光/聚光）用第一行更柔的 ramp
+            #if !defined(_FACE_SDF_ON)
             #if defined(_ADDITIONAL_LIGHTS)
                 uint lightCount = GetAdditionalLightsCount();
                 for (uint i = 0u; i < lightCount; ++i)
@@ -479,6 +494,7 @@ Shader "Custom/ToonCharacter"
                         addRampT, RAMP_ROW_ADD_SHADOW, RAMP_ROW_SPEC,
                         sp, ao, shadowTexV);
                 }
+            #endif
             #endif
 
             // 环境光：先给一个固定的暗部保底色（任何光位都不发黑），再叠加少量 SH 变化

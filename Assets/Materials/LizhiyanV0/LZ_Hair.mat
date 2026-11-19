@@ -9,8 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: LZ_Hair
   m_Shader: {fileID: 4800000, guid: 01c87a61fffab8f4a8f9f922935835a7, type: 3}
-  m_ValidKeywords:
-  - _HAIR_SPEC_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -46,7 +45,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f31ee7e71af02c143bb653646dd2a2c3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PackedMap:
@@ -63,7 +62,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AOChannel: 0
+    - _AOChannel: 3
     - _AOStrength: 1
     - _AlphaTest: 0
     - _AmbientFloor: 0.75
@@ -78,20 +77,21 @@ Material:
     - _EyeSpecPower: 90
     - _FaceAnalytic: 0
     - _FaceSDFDebug: 0
+    - _FaceSDFOn: 0
     - _FaceSDFUV: 0
     - _HairSpecIntensity: 1.4
     - _HairSpecMapStrength: 1
-    - _HairSpecOn: 1
+    - _HairSpecOn: 0
     - _HairSpecPow: 36
-    - _HairSpecShift: 0.25
+    - _HairSpecShift: 1
     - _HairSpecWidth: 0.09
     - _IndirectIntensity: 0.6
     - _IrisEdgePower: 2
     - _IrisEdgeStrength: 0.6
     - _LightArea: 0.5
     - _MatCapFlipY: 0
-    - _MatCapIntensity: 1
-    - _MetallicChannel: 1
+    - _MatCapIntensity: 0.33
+    - _MetallicChannel: 2
     - _MetallicSpecBoost: 1.6
     - _NormalFlipY: 1
     - _NormalScale: 1
@@ -110,7 +110,7 @@ Material:
     - _ShadowMapStrength: 0.5
     - _ShadowSmooth: 0.08
     - _ShadowStrength: 1
-    - _SmoothnessChannel: 3
+    - _SmoothnessChannel: 4
     - _SmoothnessMax: 0.995
     - _SmoothnessMin: 0.94
     - _SpecIntensity: 0.45

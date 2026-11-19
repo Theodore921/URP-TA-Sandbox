@@ -9,8 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Toon_Brows
   m_Shader: {fileID: 4800000, guid: 01c87a61fffab8f4a8f9f922935835a7, type: 3}
-  m_ValidKeywords:
-  - _FACE_SDF_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -78,6 +77,7 @@ Material:
     - _EyeSpecPower: 90
     - _FaceAnalytic: 0
     - _FaceSDFDebug: 0
+    - _FaceSDFOn: 0
     - _FaceSDFUV: 1
     - _HairSpecIntensity: 1.2
     - _HairSpecMapStrength: 1
