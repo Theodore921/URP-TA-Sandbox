@@ -84,7 +84,7 @@ public class GrassRoadTool : EditorWindow
 
         EditorGUILayout.HelpBox(
             "推荐直接在 Terrain 上拖动绘制道路；也可以继续使用下方路点样条编辑。\n" +
-            "绘制完成后会更新地面材质道路外观，重新烘焙草场（②）后道路上不会长草。",
+            "绘制完成后可将 Road Mask 同步到 Terrain 图层，并重新烘焙草场（②）让道路上不长草。",
             MessageType.Info);
 
         path = (GrassRoadPath)EditorGUILayout.ObjectField("道路对象", path, typeof(GrassRoadPath), true);
@@ -123,6 +123,13 @@ public class GrassRoadTool : EditorWindow
                 if (EditorUtility.DisplayDialog("清空道路", "确定清除道路掩码？该操作可通过 Undo 撤销。", "清空", "取消"))
                     ClearRoadMask();
             }
+        }
+
+        using (new EditorGUI.DisabledScope(
+                   terrain == null || path.mask == null || !path.mask.isReadable))
+        {
+            if (GUILayout.Button("将草地/道路 Mask 同步到 Terrain 图层"))
+                GrassTerrainLayerMaskSync.Sync(terrain);
         }
 
         EditorGUILayout.Space();

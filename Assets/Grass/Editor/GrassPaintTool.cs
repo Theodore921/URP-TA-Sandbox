@@ -47,7 +47,7 @@ public class GrassPaintTool : EditorWindow
     {
         scroll = EditorGUILayout.BeginScrollView(scroll);
         EditorGUILayout.HelpBox(
-            "先为 Terrain 创建草地分布图，再打开绘制模式，在 Scene 视图中左键拖动涂抹。白色区域按现有密度生成草，黑色区域不生成草；绘制图会与原有距离衰减、道路、坡度和边缘过滤共同生效。",
+            "先为 Terrain 创建草地分布图，再打开绘制模式，在 Scene 视图中左键拖动涂抹。白色区域按现有密度生成草，黑色区域不生成草；同步 Terrain 图层时也会应用当前草场的距离衰减、道路、坡度和边缘过滤。",
             MessageType.Info);
 
         EditorGUI.BeginChangeCheck();
@@ -84,12 +84,17 @@ public class GrassPaintTool : EditorWindow
             if (GUILayout.Button("全部清空")) FillMask(0);
         }
 
+        if (GUILayout.Button("将草地/道路 Mask 同步到 Terrain 图层"))
+            GrassTerrainLayerMaskSync.Sync(terrain);
+
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("分布图预览", EditorStyles.boldLabel);
         Rect previewRect = GUILayoutUtility.GetAspectRect(1f, GUILayout.MaxWidth(250f));
         EditorGUI.DrawPreviewTexture(previewRect, paintMask.distributionMask, null, ScaleMode.ScaleToFit);
         EditorGUILayout.LabelField($"分辨率：{paintMask.distributionMask.width} × {paintMask.distributionMask.height}");
-        EditorGUILayout.HelpBox("完成绘制后，使用 Tools/草地/② 烘焙草场更新草实例。", MessageType.None);
+        EditorGUILayout.HelpBox(
+            "绘制完成后同步 Terrain 图层；使用 Tools/草地/② 烘焙草场更新草实例。",
+            MessageType.None);
 
         EditorGUILayout.EndScrollView();
     }

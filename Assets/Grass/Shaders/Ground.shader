@@ -1,15 +1,12 @@
 // ============================================================================
 //  Ground.shader —— 草地场景的地面材质（PBR + 接触阴影）
 //
-//  为什么不直接用 URP Lit / Terrain Lit：
-//    · Terrain/Lit 在这个项目里没有 control map 时会画成棋盘格
-//    · 我们需要两个自定义能力：草地密度图压暗（接触阴影）、以后的路面掩码
+//  使用自定义 Terrain shader：
+//    · 保留草地密度图接触阴影和道路掩码
+//    · 同时读取 Unity Terrain 的 control map，混合最多四个 Terrain Layer
 //
-//  ── 坐标约定 ────────────────────────────────────────────────────────────
-//  地面是平面，用**世界 XZ 平面投影**采样，不依赖 UV 和切线：
-//      uv  = worldPos.xz / _TilingMeters
-//      T   = (1,0,0)   B = (0,0,1)   N = (0,1,0)
-//  所以任意地形网格都能用，也不需要模型有切线数据。
+//  Terrain Layer 使用 Terrain UV 和各自的平铺设置；细节贴图、道路掩码
+//  和草地密度图继续使用世界 XZ 坐标。
 //
 //  ── Displacement 的用法 ────────────────────────────────────────────────
 //  URP 12 没有曲面细分，位移图**不能真的把顶点顶起来**。
@@ -55,6 +52,27 @@ Shader "Grass/Ground"
         _RoadDarken         ("路面压暗", Range(0, 1)) = 0.30
         _RoadSmooth         ("路面光滑度增量", Range(0, 1)) = 0.35
         _RoadNormalBoost    ("路面法线增强", Range(0, 3)) = 1.6
+        _RoadMaskToLayer    ("道路掩码混合到 Terrain Layer 2", Range(0, 1)) = 0
+
+        [Header(Terrain Layers)]
+        _TerrainLayerTint0  ("Terrain Layer 0 色调", Color) = (1, 1, 1, 1)
+        _TerrainLayerTint1  ("Terrain Layer 1 色调", Color) = (1, 1, 1, 1)
+        _TerrainLayerTint2  ("Terrain Layer 2 色调", Color) = (1, 1, 1, 1)
+        _TerrainLayerTint3  ("Terrain Layer 3 色调", Color) = (1, 1, 1, 1)
+
+        [HideInInspector] [PerRendererData] _Control ("Control (RGBA)", 2D) = "red" {}
+        [HideInInspector] [PerRendererData] _Splat0 ("Layer 0 (R)", 2D) = "white" {}
+        [HideInInspector] [PerRendererData] _Splat1 ("Layer 1 (G)", 2D) = "white" {}
+        [HideInInspector] [PerRendererData] _Splat2 ("Layer 2 (B)", 2D) = "white" {}
+        [HideInInspector] [PerRendererData] _Splat3 ("Layer 3 (A)", 2D) = "white" {}
+        [HideInInspector] [PerRendererData] _Normal0 ("Normal 0 (R)", 2D) = "bump" {}
+        [HideInInspector] [PerRendererData] _Normal1 ("Normal 1 (G)", 2D) = "bump" {}
+        [HideInInspector] [PerRendererData] _Normal2 ("Normal 2 (B)", 2D) = "bump" {}
+        [HideInInspector] [PerRendererData] _Normal3 ("Normal 3 (A)", 2D) = "bump" {}
+        [HideInInspector] [PerRendererData] _Smoothness0 ("Smoothness 0", Range(0, 1)) = 0.5
+        [HideInInspector] [PerRendererData] _Smoothness1 ("Smoothness 1", Range(0, 1)) = 0.5
+        [HideInInspector] [PerRendererData] _Smoothness2 ("Smoothness 2", Range(0, 1)) = 0.5
+        [HideInInspector] [PerRendererData] _Smoothness3 ("Smoothness 3", Range(0, 1)) = 0.5
     }
 
     SubShader
@@ -63,6 +81,7 @@ Shader "Grass/Ground"
         {
             "RenderType" = "Opaque"
             "RenderPipeline" = "UniversalPipeline"
+            "TerrainCompatible" = "True"
             "Queue" = "Geometry"
         }
 
@@ -72,6 +91,7 @@ Shader "Grass/Ground"
             Tags { "LightMode" = "UniversalForward" }
 
             HLSLPROGRAM
+            #pragma target 3.0
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_instancing
@@ -88,13 +108,29 @@ Shader "Grass/Ground"
             TEXTURE2D(_HeightMap);     SAMPLER(sampler_HeightMap);
             TEXTURE2D(_DensityTex);    SAMPLER(sampler_DensityTex);
             TEXTURE2D(_RoadMask);      SAMPLER(sampler_RoadMask);
+            TEXTURE2D(_Control);       SAMPLER(sampler_Control);
+            TEXTURE2D(_Splat0);        SAMPLER(sampler_Splat0);
+            TEXTURE2D(_Splat1);
+            TEXTURE2D(_Splat2);
+            TEXTURE2D(_Splat3);
+            TEXTURE2D(_Normal0);       SAMPLER(sampler_Normal0);
+            TEXTURE2D(_Normal1);
+            TEXTURE2D(_Normal2);
+            TEXTURE2D(_Normal3);
 
             float4 _BaseColor, _DensityRange, _RoadRange, _RoadTint;
+            float4 _Control_TexelSize;
+            float4 _Splat0_ST, _Splat1_ST, _Splat2_ST, _Splat3_ST;
+            float4 _TerrainLayerTint0, _TerrainLayerTint1;
+            float4 _TerrainLayerTint2, _TerrainLayerTint3;
             float  _TilingMeters, _MacroTiling, _MacroStrength;
             float  _NormalScale, _RoughnessMin, _RoughnessMax, _SpecIntensity;
             float  _HeightDetail, _HeightAO;
             float  _DensityStrength, _DensityBoost;
             float  _RoadDarken, _RoadSmooth, _RoadNormalBoost;
+            float  _RoadMaskToLayer;
+            float  _Smoothness0, _Smoothness1, _Smoothness2, _Smoothness3;
+            float  _NormalScale0, _NormalScale1, _NormalScale2, _NormalScale3;
 
             // 全局变量（不挂在材质上）：GrassField 启用时 = 1，禁用时 = 0。
             // 临时关掉草地时，地面上那块"草根阴影"会一起消失，
@@ -115,6 +151,7 @@ Shader "Grass/Ground"
                 float3 positionWS  : TEXCOORD0;
                 float  fogFactor   : TEXCOORD1;
                 float4 shadowCoord : TEXCOORD2;
+                float2 terrainUV   : TEXCOORD3;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -131,6 +168,7 @@ Shader "Grass/Ground"
                 o.positionWS  = p.positionWS;
                 o.fogFactor   = ComputeFogFactor(p.positionCS.z);
                 o.shadowCoord = TransformWorldToShadowCoord(p.positionWS);
+                o.terrainUV   = v.uv;
                 return o;
             }
 
@@ -139,8 +177,57 @@ Shader "Grass/Ground"
                 // ── 平面投影：世界 XZ ─────────────────────────────────────
                 float2 uv = i.positionWS.xz / max(_TilingMeters, 0.01);
 
-                // ── 基础色 + 宏观变化（打散平铺感）────────────────────────
-                float3 albedo = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv).rgb;
+                // ── Terrain Layer splat 混合 ─────────────────────────────
+                // Terrain control map uses RGBA for layers 0-3. Match URP Terrain's
+                // half-texel sampling so painted layer edges stay aligned.
+                float2 controlUV = (i.terrainUV * (_Control_TexelSize.zw - 1.0) + 0.5)
+                                 * _Control_TexelSize.xy;
+                float4 layerWeights = SAMPLE_TEXTURE2D(_Control, sampler_Control, controlUV);
+                float weightSum = dot(layerWeights, 1.0);
+                layerWeights = weightSum > 1e-5
+                    ? layerWeights / weightSum
+                    : float4(1.0, 0.0, 0.0, 0.0);
+
+                // Optionally let the spline mask drive Terrain Layer 2. Keep this
+                // disabled until a Road diffuse texture has been assigned.
+                float2 ruv = (i.positionWS.xz - _RoadRange.xy) / max(_RoadRange.z, 0.001) + 0.5;
+                float road = 0.0;
+                if (all(ruv > 0.0) && all(ruv < 1.0))
+                    road = SAMPLE_TEXTURE2D(_RoadMask, sampler_RoadMask, ruv).r;
+
+                float otherWeight = layerWeights.r + layerWeights.g + layerWeights.a;
+                float roadWeight = max(layerWeights.b, road * _RoadMaskToLayer);
+                float remainingWeight = 1.0 - roadWeight;
+                if (otherWeight > 1e-5)
+                {
+                    float otherScale = remainingWeight / otherWeight;
+                    layerWeights.r *= otherScale;
+                    layerWeights.g *= otherScale;
+                    layerWeights.a *= otherScale;
+                }
+                else
+                {
+                    layerWeights.r = 0.0;
+                    layerWeights.g = 0.0;
+                    layerWeights.a = 0.0;
+                }
+                layerWeights.b = roadWeight;
+
+                float4 splat0 = SAMPLE_TEXTURE2D(_Splat0, sampler_Splat0,
+                    i.terrainUV * _Splat0_ST.xy + _Splat0_ST.zw);
+                float4 splat1 = SAMPLE_TEXTURE2D(_Splat1, sampler_Splat0,
+                    i.terrainUV * _Splat1_ST.xy + _Splat1_ST.zw);
+                float4 splat2 = SAMPLE_TEXTURE2D(_Splat2, sampler_Splat0,
+                    i.terrainUV * _Splat2_ST.xy + _Splat2_ST.zw);
+                float4 splat3 = SAMPLE_TEXTURE2D(_Splat3, sampler_Splat0,
+                    i.terrainUV * _Splat3_ST.xy + _Splat3_ST.zw);
+
+                float3 albedo = splat0.rgb * _TerrainLayerTint0.rgb * layerWeights.r
+                              + splat1.rgb * _TerrainLayerTint1.rgb * layerWeights.g
+                              + splat2.rgb * _TerrainLayerTint2.rgb * layerWeights.b
+                              + splat3.rgb * _TerrainLayerTint3.rgb * layerWeights.a;
+
+                // ── 宏观变化（打散平铺感）─────────────────────────────────
                 float  macro  = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap,
                                                  i.positionWS.xz / max(_TilingMeters * _MacroTiling, 0.01)).r;
                 albedo *= lerp(1.0 - _MacroStrength, 1.0 + _MacroStrength, macro);
@@ -152,14 +239,20 @@ Shader "Grass/Ground"
                 float3 N = float3(0, 1, 0);
 
                 // ── 法线贴图 ──────────────────────────────────────────────
-                float3 nTS = UnpackNormalScale(
+                float3 baseNormal = UnpackNormalScale(
                     SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, uv), _NormalScale);
-
-                // ── 道路掩码 ──────────────────────────────────────────────
-                float2 ruv = (i.positionWS.xz - _RoadRange.xy) / max(_RoadRange.z, 0.001) + 0.5;
-                float  road = 0.0;
-                if (all(ruv > 0.0) && all(ruv < 1.0))
-                    road = SAMPLE_TEXTURE2D(_RoadMask, sampler_RoadMask, ruv).r;
+                float3 terrainNormal =
+                    UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal0, sampler_Normal0,
+                        i.terrainUV * _Splat0_ST.xy + _Splat0_ST.zw), _NormalScale0) * layerWeights.r
+                  + UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal1, sampler_Normal0,
+                        i.terrainUV * _Splat1_ST.xy + _Splat1_ST.zw), _NormalScale1) * layerWeights.g
+                  + UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal2, sampler_Normal0,
+                        i.terrainUV * _Splat2_ST.xy + _Splat2_ST.zw), _NormalScale2) * layerWeights.b
+                  + UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal3, sampler_Normal0,
+                        i.terrainUV * _Splat3_ST.xy + _Splat3_ST.zw), _NormalScale3) * layerWeights.a;
+                float3 nTS = normalize(float3(
+                    baseNormal.xy + terrainNormal.xy,
+                    baseNormal.z * terrainNormal.z));
 
                 // 路面上：法线更明显（被踩出来的颗粒感）
                 nTS = normalize(float3(nTS.xy * lerp(1.0, _RoadNormalBoost, road), nTS.z));
@@ -181,6 +274,9 @@ Shader "Grass/Ground"
                 // ── 粗糙度 / 平滑度 ───────────────────────────────────────
                 float rough = SAMPLE_TEXTURE2D(_RoughnessMap, sampler_RoughnessMap, uv).r;
                 rough = lerp(_RoughnessMin, _RoughnessMax, rough);
+                float terrainSmoothness = dot(layerWeights,
+                    float4(_Smoothness0, _Smoothness1, _Smoothness2, _Smoothness3));
+                rough = lerp(rough, 1.0 - terrainSmoothness, 0.5);
                 // 被踩实的路面更光滑一点（会有一层柔和的反光）
                 rough = lerp(rough, max(rough - _RoadSmooth, 0.12), road);
                 float smoothness = 1.0 - rough;

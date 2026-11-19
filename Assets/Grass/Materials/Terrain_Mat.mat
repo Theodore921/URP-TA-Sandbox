@@ -24,12 +24,32 @@ Material:
         m_Texture: {fileID: 2800000, guid: 434ca63c68444ce439874a5c5a9b5a03, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Control:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _DensityTex:
         m_Texture: {fileID: 2800000, guid: f1ef19ce1adee1a44b0c53ec1d68bb2b, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
         m_Texture: {fileID: 2800000, guid: 76b5885f456d34d4db4cf04e605f0c8c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal3:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
@@ -44,6 +64,22 @@ Material:
         m_Texture: {fileID: 2800000, guid: 2c9913f5e2d83834d9d955322473114d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Splat0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat3:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _BaseMapScale: 0.06
@@ -55,15 +91,24 @@ Material:
     - _MacroTiling: 7
     - _NormalScale: 1
     - _RoadDarken: 0.1
+    - _RoadMaskToLayer: 0
     - _RoadNormalBoost: 1.8
     - _RoadSmooth: 0.3
     - _RoughnessMax: 1
     - _RoughnessMin: 0.55
+    - _Smoothness0: 0.5
+    - _Smoothness1: 0.5
+    - _Smoothness2: 0.5
+    - _Smoothness3: 0.5
     - _SpecIntensity: 0.55
     - _TilingMeters: 4
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _DensityRange: {r: 100, g: 100, b: 200, a: 0}
     - _RoadRange: {r: 100, g: 100, b: 200, a: 0}
-    - _RoadTint: {r: 1.05, g: 0.92, b: 0.75, a: 1}
+    - _RoadTint: {r: 1, g: 1, b: 1, a: 1}
+    - _TerrainLayerTint0: {r: 0.8867924, g: 0.8567071, b: 0.8156817, a: 1}
+    - _TerrainLayerTint1: {r: 0.70127267, g: 0.9716981, b: 0.84591883, a: 1}
+    - _TerrainLayerTint2: {r: 1, g: 1, b: 1, a: 1}
+    - _TerrainLayerTint3: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

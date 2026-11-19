@@ -154,39 +154,117 @@ public static class GrassSceneSetup
     }
 
     /// <summary>
-    /// 给地形铺一层 TerrainLayer。
-    /// 不铺的话 URP 会画那个默认棋盘格（很多人以为地形坏了，其实只是没有 layer）。
+    /// 确保基础地面、草地和道路图层存在；已有图层权重保持不变。
     /// </summary>
     static void ApplyTerrainLayer(TerrainData td)
     {
-        const string layerPath = "Assets/Grass/Materials/Ground.terrainlayer";
-        var layer = AssetDatabase.LoadAssetAtPath<TerrainLayer>(layerPath);
-        if (layer == null)
+        var oldLayers = td.terrainLayers ?? new TerrainLayer[0];
+        var oldAlphamaps = oldLayers.Length > 0
+            ? td.GetAlphamaps(0, 0, td.alphamapWidth, td.alphamapHeight)
+            : null;
+
+        var ground = GetOrCreateTerrainLayer(
+            "Assets/Grass/Materials/Ground.terrainlayer",
+            "Ground",
+            new Vector2(4f, 4f),
+            AssetDatabase.LoadAssetAtPath<Texture2D>(
+                "Assets/Textures/Ground/Ground003_1K-JPG_Color.jpg"),
+            AssetDatabase.LoadAssetAtPath<Texture2D>(
+                "Assets/Textures/Ground/Ground003_1K-JPG_NormalGL.jpg"));
+        var grass = GetOrCreateTerrainLayer(
+            "Assets/Grass/Materials/Grass.terrainlayer", "Grass", new Vector2(4f, 4f));
+        var road = GetOrCreateTerrainLayer(
+            "Assets/Grass/Materials/Road.terrainlayer", "Road", new Vector2(3f, 3f));
+
+        var requiredLayers = new[] { ground, grass, road };
+        var layers = new System.Collections.Generic.List<TerrainLayer>(requiredLayers);
+        foreach (var layer in oldLayers)
         {
-            var noise = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Textures/fbm_2x2.png");
-            layer = new TerrainLayer
-            {
-                name = "Ground",
-                diffuseTexture = noise,
-                tileSize = new Vector2(8f, 8f),
-                smoothness = 0.05f,
-                metallic = 0f
-            };
-            AssetDatabase.CreateAsset(layer, layerPath);
-            AssetDatabase.SaveAssets();
+            if (layers.Contains(layer))
+                continue;
+
+            layers.Add(layer);
         }
 
-        td.terrainLayers = new[] { layer };
+        if (layers.Count > 4)
+        {
+            Debug.LogError(
+                "[草地] Grass/Ground 当前支持最多 4 个 Terrain Layer；" +
+                "请先移除多余图层，再运行场景搭建。");
+            return;
+        }
 
-        // 关键：只配 terrainLayers 还不够。地形的 splatmap（alphamap）默认全 0，
-        // 等于"一层都没刷" —— URP 会退回到那个棋盘格。这里把第 0 层刷满。
+        bool layersChanged = oldLayers.Length != layers.Count;
+        for (int i = 0; !layersChanged && i < oldLayers.Length; i++)
+            layersChanged = oldLayers[i] != layers[i];
+        if (!layersChanged)
+            return;
+
+        td.terrainLayers = layers.ToArray();
         int res = td.alphamapResolution;
-        var alpha = new float[res, res, 1];
-        for (int y = 0; y < res; y++)
+        var alpha = new float[res, res, layers.Count];
+        if (oldAlphamaps != null)
+        {
+            for (int y = 0; y < res; y++)
             for (int x = 0; x < res; x++)
-                alpha[y, x, 0] = 1f;
+            {
+                float sum = 0f;
+                for (int oldIndex = 0; oldIndex < oldLayers.Length; oldIndex++)
+                {
+                    int newIndex = layers.IndexOf(oldLayers[oldIndex]);
+                    if (newIndex < 0 || oldIndex >= oldAlphamaps.GetLength(2))
+                        continue;
+
+                    float weight = oldAlphamaps[y, x, oldIndex];
+                    alpha[y, x, newIndex] = weight;
+                    sum += weight;
+                }
+
+                if (sum > 1e-5f)
+                {
+                    for (int i = 0; i < layers.Count; i++)
+                        alpha[y, x, i] /= sum;
+                }
+                else
+                {
+                    alpha[y, x, 0] = 1f;
+                }
+            }
+        }
+        else
+        {
+            for (int y = 0; y < res; y++)
+                for (int x = 0; x < res; x++)
+                    alpha[y, x, 0] = 1f;
+        }
+
         td.SetAlphamaps(0, 0, alpha);
 
         EditorUtility.SetDirty(td);
+        AssetDatabase.SaveAssets();
+    }
+
+    static TerrainLayer GetOrCreateTerrainLayer(
+        string path,
+        string layerName,
+        Vector2 tileSize,
+        Texture2D diffuse = null,
+        Texture2D normal = null)
+    {
+        var layer = AssetDatabase.LoadAssetAtPath<TerrainLayer>(path);
+        if (layer != null)
+            return layer;
+
+        layer = new TerrainLayer
+        {
+            name = layerName,
+            diffuseTexture = diffuse,
+            normalMapTexture = normal,
+            tileSize = tileSize,
+            smoothness = 0.05f,
+            metallic = 0f
+        };
+        AssetDatabase.CreateAsset(layer, path);
+        return layer;
     }
 }
