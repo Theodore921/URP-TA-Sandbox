@@ -68,7 +68,7 @@ Material:
     - _CloudSoftness: 0.54
     - _CloudSunIntensity: 1
     - _CloudWarp: 0.04
-    - _Exposure: 0.772968
+    - _Exposure: 1
     - _GroundSharpness: 0.05
     - _HorizonContribution: 0.5
     - _HorizonLineExponent: 64
@@ -87,9 +87,9 @@ Material:
     - _StarsSize: 3.72
     - _StarsSpeed: 0
     - _SunDiskHQ: 0
-    - _SunHaloExponent: 64
-    - _SunHaloIntensity: 0.12
-    - _SunRadius: 0.0684
+    - _SunHaloExponent: 128
+    - _SunHaloIntensity: 0.06
+    - _SunRadius: 0.0519
     - _SunSize: 0.38
     - _SunSizeConvergence: 10
     m_Colors:

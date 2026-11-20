@@ -39,6 +39,11 @@ Shader "Custom/ToonWater"
         _Layer2Tiling ("Layer 2 Tiling", Float) = 0.09
         _Layer2Speed ("Layer 2 Speed", Float) = 0.012
 
+        [Header(FFT Waves)]
+        [HideInInspector][NoScaleOffset] _FFTWaveMap ("FFT Height Map", 2D) = "black" {}
+        [HideInInspector] _FFTHeightScale ("FFT Wave Height", Range(0, 10000)) = 5000
+        [HideInInspector] _FFTRealLength ("FFT World Length", Float) = 200
+
         [Header(Specular)]
         [HDR]_SpecColor ("Spec Color", Color) = (0.749, 0.834, 0.863, 1)
         _SpecIntensity ("Spec Intensity", Range(0,4)) = 0.9
@@ -99,6 +104,8 @@ Shader "Custom/ToonWater"
                 float4 _FoamColor;
                 float4 _NormalMap_ST;
                 float4 _NormalMap2_ST;
+                float _FFTHeightScale;
+                float _FFTRealLength;
                 float _DepthFade;
                 float _DepthPower;
                 float _ShallowAlpha;
@@ -147,6 +154,9 @@ Shader "Custom/ToonWater"
             SAMPLER(sampler_NormalMap);
             TEXTURE2D(_NormalMap2);
             SAMPLER(sampler_NormalMap2);
+            TEXTURE2D(_FFTWaveMap);
+            SAMPLER(sampler_FFTWaveMap);
+            float4 _FFTWaveMap_TexelSize;
 
             struct Attributes
             {
@@ -170,16 +180,28 @@ Shader "Custom/ToonWater"
             Varyings WaterVert(Attributes input)
             {
                 Varyings o = (Varyings)0;
-                VertexPositionInputs posInputs = GetVertexPositionInputs(input.positionOS.xyz);
-                VertexNormalInputs normInputs = GetVertexNormalInputs(input.normalOS, input.tangentOS);
+                float2 uv = input.uv;
+                float height = SAMPLE_TEXTURE2D_LOD(_FFTWaveMap, sampler_FFTWaveMap, uv, 0).r * _FFTHeightScale;
+                float2 texel = _FFTWaveMap_TexelSize.xy;
+                float heightLeft = SAMPLE_TEXTURE2D_LOD(_FFTWaveMap, sampler_FFTWaveMap, uv - float2(texel.x, 0), 0).r * _FFTHeightScale;
+                float heightRight = SAMPLE_TEXTURE2D_LOD(_FFTWaveMap, sampler_FFTWaveMap, uv + float2(texel.x, 0), 0).r * _FFTHeightScale;
+                float heightBottom = SAMPLE_TEXTURE2D_LOD(_FFTWaveMap, sampler_FFTWaveMap, uv - float2(0, texel.y), 0).r * _FFTHeightScale;
+                float heightTop = SAMPLE_TEXTURE2D_LOD(_FFTWaveMap, sampler_FFTWaveMap, uv + float2(0, texel.y), 0).r * _FFTHeightScale;
+                float worldTexel = max(_FFTRealLength * texel.x, 0.001);
 
-                o.positionCS = posInputs.positionCS;
-                o.positionWS = posInputs.positionWS;
-                o.normalWS = normInputs.normalWS;
-                o.tangentWS = normInputs.tangentWS;
-                o.bitangentWS = normInputs.bitangentWS;
+                float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
+                positionWS.y += height;
+
+                o.positionCS = TransformWorldToHClip(positionWS);
+                o.positionWS = positionWS;
+                o.normalWS = normalize(float3(
+                    -(heightRight - heightLeft) / (2.0 * worldTexel),
+                    1.0,
+                    -(heightTop - heightBottom) / (2.0 * worldTexel)));
+                o.tangentWS = TransformObjectToWorldDir(input.tangentOS.xyz);
+                o.bitangentWS = cross(o.normalWS, o.tangentWS) * input.tangentOS.w;
                 o.uv = input.uv;
-                o.fogFactor = ComputeFogFactor(posInputs.positionCS.z);
+                o.fogFactor = ComputeFogFactor(o.positionCS.z);
                 return o;
             }
 

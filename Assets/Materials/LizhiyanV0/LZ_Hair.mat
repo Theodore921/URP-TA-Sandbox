@@ -95,10 +95,10 @@ Material:
     - _MetallicSpecBoost: 1.6
     - _NormalFlipY: 1
     - _NormalScale: 1
-    - _OutlineAlbedoTint: 0.3
+    - _OutlineAlbedoTint: 0.7
     - _OutlineBackBoost: 1.5
-    - _OutlineMinDistance: 2
-    - _OutlineWidth: 0.8
+    - _OutlineMinDistance: 0.91
+    - _OutlineWidth: 0
     - _RimIntensity: 0.2
     - _RimLightFacing: 0.5
     - _RimPower: 3

@@ -1,0 +1,135 @@
+#pragma kernel UpdateSpectrum
+#pragma kernel IFFT_Horizontal_FFT
+#pragma kernel IFFT_Horizontal_BitReverse
+#pragma kernel IFFT_Vertical_FFT
+#pragma kernel IFFT_Vertical_BitReverse
+#pragma kernel UpdateHeight
+
+#define GROUPSIZE 32
+#define PI 3.14159265358
+
+struct WaterSpectrum
+{
+    float2 k;
+    float4 coefficients;
+};
+
+StructuredBuffer<WaterSpectrum> buffer;
+RWTexture2D<float2> spectrumTex;
+int texN;
+float _SimulationTime;
+float _WaveSpeed;
+
+float2 ComplexMul(float2 a, float2 b)
+{
+    return float2(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x);
+}
+
+[numthreads(GROUPSIZE, GROUPSIZE, 1)]
+void UpdateSpectrum(uint3 id : SV_DispatchThreadID)
+{
+    int index = id.y * texN + id.x;
+    WaterSpectrum water = buffer[index];
+    float omega = sqrt(9.8 * length(water.k));
+    float theta = omega * _SimulationTime * _WaveSpeed;
+    float2 positivePhase = float2(cos(theta), sin(theta));
+    float2 negativePhase = float2(cos(theta), -sin(theta));
+    float2 h0K = water.coefficients.xy;
+    float2 h0NegativeK = water.coefficients.zw;
+    spectrumTex[id.xy] =
+        ComplexMul(h0K, positivePhase) +
+        ComplexMul(h0NegativeK, negativePhase);
+}
+
+int maxStage;
+
+int ReverseBit(int value, int bitCount)
+{
+    int result = 0;
+    for (int i = 0; i < bitCount; i++)
+    {
+        if (value & (1 << i))
+            result |= 1 << (bitCount - 1 - i);
+    }
+    return result;
+}
+
+RWTexture2D<float2> horizontalTexPing;
+RWTexture2D<float2> horizontalTexPong;
+
+[numthreads(GROUPSIZE, GROUPSIZE, 1)]
+void IFFT_Horizontal_BitReverse(uint3 id : SV_DispatchThreadID)
+{
+    int index = ReverseBit(id.x, maxStage);
+    int centeredIndex = (index + (texN >> 1)) & (texN - 1);
+    horizontalTexPing[id.xy] = spectrumTex[int2(centeredIndex, id.y)];
+}
+
+int stage;
+
+[numthreads(GROUPSIZE, GROUPSIZE, 1)]
+void IFFT_Horizontal_FFT(uint3 id : SV_DispatchThreadID)
+{
+    int currentSize = 1 << stage;
+    int halfSize = currentSize >> 1;
+    int indexInGroup = id.x % currentSize;
+    int k = id.x % halfSize;
+    float angle = 2.0 * PI * k / currentSize;
+    float2 twiddle = float2(cos(angle), sin(angle));
+
+    if (indexInGroup < halfSize)
+    {
+        float2 a = horizontalTexPing[id.xy];
+        float2 b = horizontalTexPing[int2(id.x + halfSize, id.y)];
+        horizontalTexPong[id.xy] = a + ComplexMul(twiddle, b);
+    }
+    else
+    {
+        float2 a = horizontalTexPing[int2(id.x - halfSize, id.y)];
+        float2 b = horizontalTexPing[id.xy];
+        horizontalTexPong[id.xy] = a - ComplexMul(twiddle, b);
+    }
+}
+
+RWTexture2D<float2> verticalTexPing;
+RWTexture2D<float2> verticalTexPong;
+
+[numthreads(GROUPSIZE, GROUPSIZE, 1)]
+void IFFT_Vertical_BitReverse(uint3 id : SV_DispatchThreadID)
+{
+    int index = ReverseBit(id.y, maxStage);
+    int centeredIndex = (index + (texN >> 1)) & (texN - 1);
+    verticalTexPing[id.xy] = horizontalTexPing[int2(id.x, centeredIndex)];
+}
+
+[numthreads(GROUPSIZE, GROUPSIZE, 1)]
+void IFFT_Vertical_FFT(uint3 id : SV_DispatchThreadID)
+{
+    int currentSize = 1 << stage;
+    int halfSize = currentSize >> 1;
+    int indexInGroup = id.y % currentSize;
+    int k = id.y % halfSize;
+    float angle = 2.0 * PI * k / currentSize;
+    float2 twiddle = float2(cos(angle), sin(angle));
+
+    if (indexInGroup < halfSize)
+    {
+        float2 a = verticalTexPing[id.xy];
+        float2 b = verticalTexPing[int2(id.x, id.y + halfSize)];
+        verticalTexPong[id.xy] = a + ComplexMul(twiddle, b);
+    }
+    else
+    {
+        float2 a = verticalTexPing[int2(id.x, id.y - halfSize)];
+        float2 b = verticalTexPing[id.xy];
+        verticalTexPong[id.xy] = a - ComplexMul(twiddle, b);
+    }
+}
+
+RWTexture2D<float> heightTex;
+
+[numthreads(GROUPSIZE, GROUPSIZE, 1)]
+void UpdateHeight(uint3 id : SV_DispatchThreadID)
+{
+    heightTex[id.xy] = verticalTexPing[id.xy].x / (texN * texN);
+}
