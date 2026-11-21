@@ -1,46 +1,37 @@
 # ============================================================
-#  URP_Projects 版本控制分工
+#  URP Tech Art Sandbox — .gitignore
 #
-#  Git  → 代码、Shader、场景、材质、配置（文本，可 diff / 可合并 / 要 review）
-#  SVN  → 二进制资产（贴图、模型、动画、地形数据、截图），见下方 "美术资产" 段
+#  原则：仓库里只放「重新打开工程需要的东西」+「人写的文本」。
+#  凡是 Unity 能重建的（Library / Temp / obj / 构建产物），
+#  或者体积巨大、只在本机做参考用的素材，一律不进 Git。
 #
-#  判据不是"美术还是程序"，而是三条：
-#    1. 二进制、无法三方合并
-#    2. 单文件大、改一次多存一整份
-#    3. 需要加锁独占编辑
-#  满足任意两条 → SVN。
-#
-#  被 SVN 接管的路径必须在这里同步 ignore，两边绝不能同时跟踪同一个文件。
-#  完整说明见 VERSION_CONTROL.md
+#  注意：.gitignore 不支持行尾注释，注释必须单独成行，
+#        否则整行（含 # 之后的内容）都会被当成匹配模式。
 # ============================================================
 
-# ============================================================
-#  美术资产（由 SVN 管理，Git 只留占位）
-#  ★ 改动这一节时，必须同步改 Tools/Setup-SvnArt.ps1 里的 $ArtPaths
-# ============================================================
+# ---------- 体积大、只在本地做参考的目录 ----------
+# 这些目录没有被跟踪的 .meta，删除后 Unity 按空目录处理；
+# 场景也不引用它们，所以从 Git 克隆出来的工程依然能直接打开、直接跑。
 /Assets/TerrainSampleAssets/
 /Assets/Screenshots/
-# /Assets/Characters/
-# /Assets/Textures/
-# /Assets/Models/
 /Assets/SkyCheck/
-# /Assets/Animations/
 /Assets/Art/
-
-# Assets/Grass 是混合目录：代码/Shader/材质留在 Git，只有烘焙出来的
-# 二进制地形数据（GrassField.bytes、RoadMask.asset、GrassDensity.asset）走 SVN
-# /Assets/Grass/Data/
-
-# 顶层开发截图（在 Assets 之外，Unity 不引用，纯过程记录）
 /Screenshots/
 
-# ---------- SVN 工作副本自身的元数据，绝不能进 Git ----------
+# 上面这些目录被整体忽略后，它们同名的 .meta 仍会被 Git 看见，
+# 单独提交一个孤儿 .meta 会让 Unity 以为有个空资源，所以一并忽略。
+/Assets/TerrainSampleAssets.meta
+/Assets/Screenshots.meta
+/Assets/SkyCheck.meta
+/Assets/Art.meta
+
+# ---------- SVN 工作副本自身的元数据 ----------
+# 早期用过 Git+SVN 混合方案，本地还残留 .svn 工作副本；
+# 它只是版本控制元数据，绝不能进 Git（里面还有 pristine 原始文件副本）。
 .svn/
 **/.svn/
 
-# ============================================================
-#  Unity 自动生成的缓存（删掉后 Unity 会自己重建）
-# ============================================================
+# ---------- Unity 自动生成的缓存（删掉后 Unity 会自己重建） ----------
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/

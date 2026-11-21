@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Fur(Postprocessing).unity
+    path: Assets/Scenes/Grass_Field.unity
+    guid: e883d9595f8f80248bb04e9d4b470034
+  - enabled: 1
+    path: Assets/Scenes/Fur_ShellTexturing.unity
+    guid: b537ab9b0bcd4cd4bbec9499b48b0a2a
+  - enabled: 1
+    path: Assets/Scenes/Fur_PostProcessing.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Skybox.unity
+    guid: 0ea4f5c645601fd4fbfabc69381b013f
+  - enabled: 1
+    path: Assets/Scenes/Water_Dither.unity
+    guid: 3c53aebc79c4e0249a070fd407d84c2d
   m_configObjects: {}

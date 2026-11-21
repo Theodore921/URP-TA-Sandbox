@@ -5,7 +5,7 @@
 #  "二进制"，取决于写这个文件时工程的序列化模式。所以这几类【不要】
 #  强制 text，交给 `* text=auto` 按内容自动判断：
 #    - Force Text 保存的场景 → 认作文本，正常 diff / 合并
-#    - 二进制场景（比如你现在的 Grass.unity）→ 认作二进制，原样存储
+#    - 二进制场景（比如现在的 Grass_Field.unity）→ 认作二进制，原样存储
 #  如果硬写 `*.unity text`，git 会把二进制场景的 CRLF 改写掉，直接损坏文件。
 #
 #  原来的 `* text=auto` 保留下来是对的，但缺少对二进制资产的显式声明，
@@ -91,7 +91,7 @@
 #     git config --global merge.unityyamlmerge.driver '"C:/Program Files/Unity/Hub/Editor/2021.3.45f1/Editor/Data/Tools/UnityYAMLMerge.exe" merge -p %O %B %A %A'
 #     git config --global merge.unityyamlmerge.recursive binary
 #
-#  你的 Grass.unity 目前是二进制格式（2MB），说明它是在
+#  Grass_Field.unity 目前仍是二进制格式（约 6MB），说明它是在
 #  Asset Serialization 还不是 Force Text 的时候保存的。
-#  在 Unity 里打开它、Ctrl+S 重新保存一次就会转成文本格式。
+#  在 Unity 里打开它、Ctrl+S 重新保存一次就会转成文本格式（体积会变大，但可 diff）。
 # ============================================================
