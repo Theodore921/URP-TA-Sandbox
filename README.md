@@ -11,7 +11,7 @@ tools that make them usable in an editor.
 
 > **中文摘要**
 >
-> 这是一个 Unity 2021.3 + URP 12.1.15 的实时渲染技术试验场，包含五条独立的渲染管线：
+> 这是一个 Unity 2021.3 + URP 12.1.15 的实时渲染技术试验场，包含五套独立的技术演示：
 > GPU 驱动的草地（compute 剔除 + `DrawMeshInstancedIndirect` + 交互推力场）、
 > 两种毛发方案（壳层 / 屏幕空间后处理）、FFT 海洋水面（含平面反射与抖动混合）、
 > 分层叠加的风格化天空球，以及一整套三渲二 / NPR 角色着色器（Ramp 阴影、双通道法线、
@@ -241,8 +241,8 @@ A few decisions worth calling out, all of which are explained in the source comm
 - `Grass_Field.unity` is still **binary-serialised** (~6 MB) even though the project is set to
   *Force Text*; it was saved before that setting took effect. Open it and re-save to convert it to
   YAML (diffable, but larger).
-- The repo carries its art (~600 MB) so it is cloneable as-is. Roadmap items would be moving
-  binaries to Git LFS or shipping a slim demo build.
+- The repo carries its art (~600 MB) so it is cloneable as-is. A natural next step would be moving
+  binaries to Git LFS, or shipping a slim demo build that downloads art separately.
 - `Packages/manifest.json` includes `com.coplaydev.unity-mcp`, a git-URL dev dependency used for
   AI-assisted editing during development. It is not needed to open the scenes — remove that line
   if you don't want it.
@@ -258,7 +258,7 @@ replaced) before any commercial use**:
 
 | Path | Origin |
 |---|---|
-| `Assets/Characters/Lizhiyan/`, `Assets/Models/Lizhiyan*.fbx` | Fan-made character model + textures |
+| `Assets/Characters/Lizhiyan/`, `Assets/Models/Lizhiyan*.fbx` | Character model + textures from a third-party source |
 | `Assets/Models/Mixamo/`, `Assets/Animations/` | Mixamo animation clips |
 | `Assets/Office/Cliffs/`, `Assets/Office/Rocks/` | 4K PBR rock/cliff texture sets and a Sketchfab rock scan |
 | `Assets/Shaders/Zhanshuang/` | NPR shader set by its original author |
