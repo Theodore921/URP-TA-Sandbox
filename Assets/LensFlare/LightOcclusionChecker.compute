@@ -1,0 +1,22 @@
+#pragma kernel PrepareLightOcclusion
+
+struct LightUV
+{
+    int x;
+    int y;
+};
+RWStructuredBuffer<float> _LightSourceDepth;
+RWStructuredBuffer<LightUV> _LightUV;
+Texture2D<float4> _DepthTex;
+float4 _ZBufferDelivered;
+
+float LinearEyeDepth(float depth, float4 zBufferParam)
+{
+    return 1.0 / (zBufferParam.z * depth + zBufferParam.w);
+}
+
+[numthreads(8,1,1)]
+void PrepareLightOcclusion (uint3 id : SV_DispatchThreadID)
+{
+    _LightSourceDepth[id.x] = LinearEyeDepth(_DepthTex[uint2(_LightUV[id.x].x, _LightUV[id.x].y)].x, _ZBufferDelivered);
+}
