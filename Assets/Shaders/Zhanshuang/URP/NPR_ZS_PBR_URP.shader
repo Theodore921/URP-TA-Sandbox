@@ -278,7 +278,7 @@ Shader "NPR/NPR_ZS_PBR_URP"
             OutlineVaryings OutlineVert(OutlineAttributes input)
             {
                 OutlineVaryings output;
-                input.positionOS.xyz += input.normalOS * _OulineScale * 0.01 * input.color.a;
+                input.positionOS.xyz += input.normalOS.xyz * _OulineScale * 0.01 * input.color.a;
                 output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
                 return output;
             }
