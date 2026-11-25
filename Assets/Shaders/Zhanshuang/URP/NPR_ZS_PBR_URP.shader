@@ -74,10 +74,6 @@ Shader "NPR/NPR_ZS_PBR_URP"
             #include "NPR_ZS_PBR_URP_Brdf.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _MainTex_ST;
-                float4 _NormalMap_ST;
-                float4 _PBRMixMap_ST;
-                float4 _LightMap_ST;
                 float4 _OutlineColor;
                 float _RoughnessScale;
                 float _MetallicScale;
@@ -157,9 +153,9 @@ Shader "NPR/NPR_ZS_PBR_URP"
                 float nh = dot(geometricNormal, halfDirection);
 
                 float3 baseMap = SAMPLE_TEXTURE2D(
-                    _MainTex, sampler_MainTex, TRANSFORM_TEX(input.uv, _MainTex)).rgb;
+                    _MainTex, sampler_MainTex, input.uv).rgb;
                 float4 mixMap = SAMPLE_TEXTURE2D(
-                    _PBRMixMap, sampler_PBRMixMap, TRANSFORM_TEX(input.uv, _PBRMixMap));
+                    _PBRMixMap, sampler_PBRMixMap, input.uv);
 
                 float metallic = mixMap.r * _MetallicScale;
                 float roughness = (1.0 - mixMap.g) * _RoughnessScale;
@@ -182,7 +178,7 @@ Shader "NPR/NPR_ZS_PBR_URP"
                     _RimIntensity * baseMap;
 
                 float3 lightMap = SAMPLE_TEXTURE2D(
-                    _LightMap, sampler_LightMap, TRANSFORM_TEX(input.uv, _LightMap)).rgb;
+                    _LightMap, sampler_LightMap, input.uv).rgb;
                 float rampAdd = lightMap.r;
                 float shadowAo = lightMap.g;
 
@@ -201,18 +197,18 @@ Shader "NPR/NPR_ZS_PBR_URP"
 
                 float3 normalTS = UnpackNormalScale(
                     SAMPLE_TEXTURE2D(
-                        _NormalMap, sampler_NormalMap, TRANSFORM_TEX(input.uv, _NormalMap)),
+                        _NormalMap, sampler_NormalMap, input.uv),
                     1.0);
                 float3x3 tangentToWorld = float3x3(tangent, bitangent, geometricNormal);
                 float3 shadingNormal = normalize(mul(normalTS, tangentToWorld));
 
                 float3 specular = 0.0;
                 #if defined(_SPECSHIFT_GGX)
-                    specular += NPR_SpecularGGX(
+                    specular += Specular_GGX(
                         shadingNormal, lightDirection, halfDirection, viewDirection, roughness, f0) *
                         ao * _SpecularIntensity * ggxMask * materialMask;
                 #elif defined(_SPECSHIFT_BLINPHONG)
-                    NPRStylizedSpecularParam param;
+                    StylizedSpecularParam param;
                     param.BaseColor = baseMap;
                     param.Normal = shadingNormal;
                     param.Shininess = _Shininess;
@@ -220,7 +216,7 @@ Shader "NPR/NPR_ZS_PBR_URP"
                     param.Threshold = _Threshold;
                     param.dv = tangent;
                     param.du = bitangent;
-                    specular += NPR_StylizedSpecularLightBlinPhong(param, halfDirection) *
+                    specular += StylizedSpecularLight_BlinPhong(param, halfDirection) *
                         _SpecShiftIntensity * ggxMask * materialMask;
                 #endif
 
@@ -245,10 +241,6 @@ Shader "NPR/NPR_ZS_PBR_URP"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _MainTex_ST;
-                float4 _NormalMap_ST;
-                float4 _PBRMixMap_ST;
-                float4 _LightMap_ST;
                 float4 _OutlineColor;
                 float _RoughnessScale;
                 float _MetallicScale;
