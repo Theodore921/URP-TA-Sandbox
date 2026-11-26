@@ -17,7 +17,7 @@ public static class GrassSceneSetup
     const float TerrainSize = 120f;
     const float TerrainHeight = 30f;
 
-    [MenuItem("Tools/草地/③ 在当前场景创建草地对象", false, 4)]
+    [MenuItem("Tools/草地/在当前场景创建草地对象", false, 4)]
     public static void Setup()
     {
         // ── 1. Terrain ──────────────────────────────────────────────────────
@@ -71,10 +71,10 @@ public static class GrassSceneSetup
         field.data = AssetDatabase.LoadAssetAtPath<GrassFieldData>("Assets/Grass/Data/GrassField.asset");
 
         var missing = "";
-        if (field.mesh == null)        missing += " 草叶网格(①)";
-        if (field.material == null)    missing += " 材质(①b)";
+        if (field.mesh == null)        missing += " 草叶网格";
+        if (field.material == null)    missing += " 材质";
         if (field.cullShader == null)  missing += " 剔除ComputeShader";
-        if (field.data == null)        missing += " 草场数据(②)";
+        if (field.data == null)        missing += " 草场数据";
         if (missing.Length > 0)
             Debug.LogWarning("[草地] 还缺：" + missing + " —— 按菜单顺序执行即可");
 
@@ -94,7 +94,7 @@ public static class GrassSceneSetup
         RenderSettings.fogColor = new Color(0.62f, 0.68f, 0.76f, 1f);
 
         Selection.activeGameObject = host;
-        Debug.Log("[草地] 场景搭建完成。下一步：Tools/草地/② 烘焙草场");
+        Debug.Log("[草地] 场景搭建完成。下一步：Tools/草地/烘焙草场");
     }
 
     static Material GetOrCreateTerrainMaterial()

@@ -11,12 +11,12 @@ using UnityEngine;
 //    3. 建 WASD 胶囊体，挂上控制器和 GrassTrailEmitter
 //    4. 保存场景
 //
-//  用法：Tools/草地/④ 添加交互测试（WASD）
+//  用法：Tools/草地/添加交互测试（WASD）
 // ============================================================================
 
 public static class GrassInteractionSetup
 {
-    [MenuItem("Tools/草地/④ 添加交互测试（WASD）", false, 5)]
+    [MenuItem("Tools/草地/添加交互测试（WASD）", false, 5)]
     public static void Setup()
     {
         var terrain = Terrain.activeTerrain;
@@ -31,7 +31,7 @@ public static class GrassInteractionSetup
 
         var grassMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/Grass/Materials/Grass_Mat.mat");
         if (grassMat == null)
-            Debug.LogWarning("[草地] 找不到 Grass_Mat，先执行 ①b 生成草地材质");
+            Debug.LogWarning("[草地] 找不到 Grass_Mat，先执行“生成草地材质”");
 
         // ── 1. 材质 ─────────────────────────────────────────────────────────
         var stampMat = GetOrCreateMaterial("Assets/Grass/Materials/GrassTrailStamp.mat",

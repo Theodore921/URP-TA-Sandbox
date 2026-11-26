@@ -23,7 +23,7 @@ public static class GrassBladeMeshBuilder
     const int Cols = 3;
     const int Rows = 5;
 
-    [MenuItem("Tools/草地/① 生成草叶网格", false, 1)]
+    [MenuItem("Tools/草地/生成草叶网格", false, 1)]
     public static void Build()
     {
         EnsureFolder("Assets/Grass", "Meshes");
@@ -92,7 +92,7 @@ public static class GrassBladeMeshBuilder
                   $"（期望 center=(0,0.5,0) size=(1,1,0)，pivot 在根部）");
     }
 
-    [MenuItem("Tools/草地/①b 生成草地材质", false, 2)]
+    [MenuItem("Tools/草地/生成草地材质", false, 2)]
     public static void BuildMaterial()
     {
         EnsureFolder("Assets/Grass", "Materials");

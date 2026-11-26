@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class GrassTerrainLayerMaskSync
 {
-    [MenuItem("Tools/草地/⑦ 从 Mask 同步 Terrain 图层", false, 8)]
+    [MenuItem("Tools/草地/从 Mask 同步 Terrain 图层", false, 8)]
     static void SyncActiveTerrain()
     {
         var terrain = Terrain.activeTerrain;

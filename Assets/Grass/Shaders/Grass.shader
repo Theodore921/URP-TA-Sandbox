@@ -283,7 +283,7 @@ Shader "Grass/GrassField"
             float2 trailPush = inst.c.xy * _TrailStrength;
             float  pushMag   = saturate(length(trailPush));
 
-            // ── 贝塞尔曲线（文章第 1 节）─────────────────────────────────
+            // ── 贝塞尔曲线  ─────────────────────────────────
             float t = uv.y;
             float2 p0 = float2(0.0, 0.0);
             float2 p1 = float2((_P1XMidpoint + _BendAmount) * h, _P1YCurve * h);
@@ -299,16 +299,12 @@ Shader "Grass/GrassField"
             float2 curve = GrassBezierPoint(p0, p1, p2, t);
             float2 deriv = GrassBezierDerivative(p0, p1, p2, t);
 
-            // ── 叶片宽度（文章第 1 节：uv.v 构造 mask）───────────────────
+            // ── 叶片宽度 ───────────────────
             float widthMask = GrassWidthMask(t);
             float xOff = (uv.x - 0.5) * w * widthMask;
 
             // ── 世界坐标组装 ─────────────────────────────────────────────
-            float3 posWS = instPos
-                         + r2 * xOff
-                         + f2 * curve.x
-                         + float3(0, curve.y, 0)
-                         + r2 * (wind.y * t);
+            float3 posWS = instPos + r2 * xOff + f2 * curve.x + float3(0, curve.y, 0) + r2 * (wind.y * t);
 
             // ── 玩家交互：直接在世界空间沿径向推开 ───────────────────────
             // uv.y (t) 保证根部不动、只有上半段倒伏；

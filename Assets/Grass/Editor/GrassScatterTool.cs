@@ -4,7 +4,7 @@ using UnityEngine;
 // ============================================================================
 //  GrassScatterTool —— 撒点烘焙窗口（参数面板 + 调用 GrassBaker）
 //
-//  用法：Tools/草地/② 烘焙草场
+//  用法：Tools/草地/烘焙草场
 //  逻辑都在 GrassBaker 里，这里只负责收集参数和显示预估。
 // ============================================================================
 
@@ -30,7 +30,7 @@ public class GrassScatterTool : EditorWindow
 
     Vector2 scroll;
 
-    [MenuItem("Tools/草地/② 烘焙草场", false, 3)]
+    [MenuItem("Tools/草地/烘焙草场", false, 3)]
     public static void Open()
     {
         var w = GetWindow<GrassScatterTool>(false, "草地烘焙", true);
@@ -39,13 +39,13 @@ public class GrassScatterTool : EditorWindow
     }
 
     /// <summary>用默认参数直接烘焙（不想开窗口时用这个，也方便脚本调用）。</summary>
-    [MenuItem("Tools/草地/②b 用默认参数烘焙", false, 4)]
+    [MenuItem("Tools/草地/用默认参数烘焙", false, 4)]
     public static void BakeDefault()
     {
         var t = Terrain.activeTerrain;
         if (t == null)
         {
-            Debug.LogError("[草地] 场景里没有 Terrain，先执行 ③ 创建草地对象");
+            Debug.LogError("[草地] 场景里没有 Terrain，先执行“在当前场景创建草地对象”");
             return;
         }
 
@@ -143,7 +143,7 @@ public class GrassScatterTool : EditorWindow
         terrain = (Terrain)EditorGUILayout.ObjectField("地形", terrain, typeof(Terrain), true);
         if (terrain == null)
         {
-            EditorGUILayout.HelpBox("场景里没有 Terrain。先执行 Tools/草地/③ 在当前场景创建草地对象。",
+            EditorGUILayout.HelpBox("场景里没有 Terrain。先执行 Tools/草地/在当前场景创建草地对象。",
                                     MessageType.Warning);
             EditorGUILayout.EndScrollView();
             return;

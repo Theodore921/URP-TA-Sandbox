@@ -18,7 +18,7 @@ public class GrassPaintTool : EditorWindow
     Color32[] workingPixels;
     Vector2 scroll;
 
-    [MenuItem("Tools/草地/⑥ 绘制草地分布", false, 7)]
+    [MenuItem("Tools/草地/绘制草地分布", false, 7)]
     public static void Open()
     {
         var window = GetWindow<GrassPaintTool>(false, "草地分布绘制", true);
@@ -93,7 +93,7 @@ public class GrassPaintTool : EditorWindow
         EditorGUI.DrawPreviewTexture(previewRect, paintMask.distributionMask, null, ScaleMode.ScaleToFit);
         EditorGUILayout.LabelField($"分辨率：{paintMask.distributionMask.width} × {paintMask.distributionMask.height}");
         EditorGUILayout.HelpBox(
-            "绘制完成后同步 Terrain 图层；使用 Tools/草地/② 烘焙草场更新草实例。",
+            "绘制完成后同步 Terrain 图层；使用 Tools/草地/烘焙草场更新草实例。",
             MessageType.None);
 
         EditorGUILayout.EndScrollView();

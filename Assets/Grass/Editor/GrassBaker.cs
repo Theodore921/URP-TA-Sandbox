@@ -246,7 +246,7 @@ public static class GrassBaker
         else
         {
             Debug.LogWarning("[草地] 地面材质不是 Grass/Ground，接触阴影不会生效。" +
-                             "执行 Tools/草地/③ 重建地形材质。");
+                             "执行 Tools/草地/在当前场景创建草地对象。");
         }
 
         float mb = all.Count * 32f / (1024f * 1024f);

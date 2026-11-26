@@ -24,9 +24,9 @@ using UnityEngine.Rendering;
 public class GrassField : MonoBehaviour
 {
     [Header("资源")]
-    [Tooltip("烘焙出来的草场数据（Tools/草地/② 烘焙草场）")]
+    [Tooltip("烘焙出来的草场数据（Tools/草地/烘焙草场）")]
     public GrassFieldData data;
-    [Tooltip("草叶网格（Tools/草地/① 生成草叶网格）")]
+    [Tooltip("草叶网格（Tools/草地/生成草叶网格）")]
     public Mesh mesh;
     [Tooltip("草地材质（Grass/GrassField）")]
     public Material material;

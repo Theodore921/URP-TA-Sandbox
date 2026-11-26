@@ -6,11 +6,11 @@ using UnityEngine;
 //  GrassRoadTool —— 道路绘制工具
 //
 //  用法：
-//    1. 菜单 Tools/草地/⑤ 道路绘制工具
+//    1. 菜单 Tools/草地/道路绘制工具
 //    2. 勾上「点选模式」，在 Scene 视图里沿路径点几下（左键加点，右键结束）
 //    3. 调路宽 / 边缘噪声
 //    4. 点「重建掩码」→ 生成 RoadMask 并自动挂到地面材质上
-//    5. 重新烘焙草场（②）让路面长不出草
+//    5. 重新烘焙草场让路面长不出草
 //
 //  坐标约定与草地密度图一致：uv = (worldXZ - worldCenter) / worldSize + 0.5
 // ============================================================================
@@ -32,7 +32,7 @@ public class GrassRoadTool : EditorWindow
     Color32[] workingPixels;
     Vector2 scroll;
 
-    [MenuItem("Tools/草地/⑤ 道路绘制工具", false, 6)]
+    [MenuItem("Tools/草地/道路绘制工具", false, 6)]
     public static void Open()
     {
         var w = GetWindow<GrassRoadTool>(false, "道路绘制", true);
@@ -84,7 +84,7 @@ public class GrassRoadTool : EditorWindow
 
         EditorGUILayout.HelpBox(
             "推荐直接在 Terrain 上拖动绘制道路；也可以继续使用下方路点样条编辑。\n" +
-            "绘制完成后可将 Road Mask 同步到 Terrain 图层，并重新烘焙草场（②）让道路上不长草。",
+            "绘制完成后可将 Road Mask 同步到 Terrain 图层，并重新烘焙草场让道路上不长草。",
             MessageType.Info);
 
         path = (GrassRoadPath)EditorGUILayout.ObjectField("道路对象", path, typeof(GrassRoadPath), true);
